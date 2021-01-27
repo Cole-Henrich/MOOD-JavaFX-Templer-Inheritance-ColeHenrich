@@ -156,8 +156,8 @@ public class GameLogic {
                 collided = true;
             }
 
-            if (player.y - player.getHeight() < 0) {
-                player.y = player.getHeight();
+            if (player.y < 0) {
+                player.y = 0;
                 player.bounceY();
                 collided = true;
             }
@@ -169,8 +169,8 @@ public class GameLogic {
             player.bounceX();
             collided = true;
         }
-        if( player.x - player.getWidth() < 0 ){
-            player.x = player.getWidth();
+        if( player.x < 0 ){
+            player.x = 0;
             player.bounceX();
             collided = true;
         }
@@ -184,33 +184,6 @@ public class GameLogic {
 
     public void removeForce(DIRECTION direction){
         forcesOnPlayer.remove(direction);
-    }
-
-    /**
-     * Checks to see if two balls collide and performs an inelastic collision
-     * @param ball1 one of the balls to check
-     * @param ball2 second ball to check colliion with
-     * @return true if ball1 and ball2 collided, false otherwise
-     */
-    private boolean collideBalls( Ball ball1, Ball ball2 ){
-        // inelastic collision
-        // Swap velocities on collision
-        boolean collided = false;
-
-        if( ball1.intersects(ball2) ){
-            double velXp = ball1.velX;
-            double velYp = ball1.velY;
-
-            ball1.velX = ball2.velX;
-            ball1.velY = ball2.velY;
-
-            ball2.velX = velXp;
-            ball2.velY = velYp;
-
-            collided = true;
-        }
-
-        return collided;
     }
 
     /**
@@ -338,41 +311,22 @@ public class GameLogic {
                 for( int i = 0; i < enemies.size(); i++ ) {
                     Mob enemy = enemies.get(i);
                     for( int j = i + 1; j < enemies.size(); j++ ) {
-                        if( enemy instanceof Ball && enemies.get(j) instanceof Ball ) {
-                            if (collideBalls((Ball)enemy, (Ball)enemies.get(j))) {
-                                enemies.remove(j);
-                                enemies.remove(enemy);
-                                j -= 2;
-                            }
-                        }
-                    }
-
-                    // Obstacle-enemy collision -- only removes enemies
-                   for( int j = 0; j < obstacles.size(); j++ ) {
-                        if( obstacles.get(j).intersects(enemy) ){
+                        if (enemy.intersects(enemies.get(j))) {
+                            enemies.remove(j);
                             enemies.remove(enemy);
-                            i--;
+                            j -= 2;
                         }
                     }
 
-
-                    boolean enemyRemove = collideBalls(player, enemy);
+                    boolean enemyRemove = enemy.intersects(player);
                     if( enemyRemove ){
+                        player.velX = enemy.velX;
+                        player.velY = enemy.velY;
                         enemies.remove(enemy);
                         i--;
                     }
                     playerCollided =  enemyRemove || playerCollided;
                 }
-                // Check player with the obstacles
-                for( int i = 0; i < obstacles.size(); i++ ) {
-                    Obstacle o = obstacles.get(i);
-                    if( o.intersects(player)){
-                        playerCollided = true;
-                        obstacles.remove(o);
-                        i--;
-                    }
-                }
-
 
                 if( playerCollided ){
                     // Stops lives being lost if green

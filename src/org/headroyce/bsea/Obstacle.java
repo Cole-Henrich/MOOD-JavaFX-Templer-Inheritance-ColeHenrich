@@ -50,27 +50,6 @@ public class Obstacle extends Mob {
         return this.intersects(o);
     }
 
-    /**
-     * Check to see if the obstacle overlaps with another obstacle
-     * @param other the second obstacle to check intersection with
-     * @return true if this objects intersect, false otherwise
-     */
-    public boolean intersects(Obstacle other){
-        if( this.x + this.getWidth() < other.x ){
-            return false;
-        }
-        if( this.x > other.x + other.getWidth()){
-            return false;
-        }
-        if( this.y + this.getHeight() < other.y ){
-            return false;
-        }
-        if( this.y > other.y + other.getHeight()){
-            return false;
-        }
-
-        return true;
-    }
 
 
     public void render( Canvas canvas ){

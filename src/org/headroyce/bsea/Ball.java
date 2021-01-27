@@ -30,9 +30,6 @@ public class Ball extends Mob{
         this.radius = radius;
     }
 
-
-
-
     /**
      * Set the radius of this object.  A ball's radius must be positive.
      * @param radius the new, positive, radius of this object
@@ -42,7 +39,43 @@ public class Ball extends Mob{
         boolean rtn = false;
 
         if( radius > 0 ) {
+            super.setHeight(radius*2);
+            super.setWidth(radius*2);
             this.radius = radius;
+            rtn = true;
+        }
+
+        return rtn;
+    }
+
+    /**
+     * Set the width of this object.  An obstacles's width must be positive.
+     * @param w the new, positive, width of this object
+     * @return true if the width is set, false if width is not changed
+     */
+    public boolean setWidth(double w){
+        boolean rtn = false;
+
+        if( w > 0 ) {
+            super.setWidth(w);
+            this.radius = w/2;
+            rtn = true;
+        }
+
+        return rtn;
+    }
+
+    /**
+     * Set the height of this object.  An obstacles's height must be positive.
+     * @param h the new, positive, height of this object
+     * @return true if the height is set, false if height is not changed
+     */
+    public boolean setHeight(double h){
+        boolean rtn = false;
+
+        if( h > 0 ) {
+            super.setHeight(h);
+            this.radius = h/2;
             rtn = true;
         }
 
@@ -80,6 +113,6 @@ public class Ball extends Mob{
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gc.setFill(this.getColor());
-        gc.fillOval(x-radius,y-radius, 2*radius, 2*radius);
+        gc.fillOval(x,y, 2*radius, 2*radius);
     }
 }
