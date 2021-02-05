@@ -14,4 +14,7 @@ public class SpikedWall extends Obstacle{
             this.x = x;
         }
     }
+    public int damage(int hp) {
+        return super.damage(hp, -1);
+    }
 }

@@ -9,4 +9,5 @@ public class LifeGiver extends Ball {
     public LifeGiver( double radius){
         setColor(Color.GREEN);
     }
+
 }

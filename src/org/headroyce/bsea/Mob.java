@@ -25,6 +25,16 @@ public class Mob {
         boundY = new double[2];
     }
 
+    /**
+     *
+     * @param hp the hp object
+     * @param lose how much hp to lose. In case of lifegiver it is negative (lose neg = pos)
+     * @return
+     */
+    public int damage(int hp, int lose ){
+        hp  += lose;
+        return hp;
+    }
 
 
     /**
