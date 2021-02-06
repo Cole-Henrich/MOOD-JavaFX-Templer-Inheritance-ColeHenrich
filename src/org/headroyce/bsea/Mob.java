@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 public class Mob {
     private Color color;
     private double hp;
-
+    private double damage;
     private double width, height;
 
     public double x, y;         // Center point of the circle
@@ -17,26 +17,34 @@ public class Mob {
     // [0] - lower bound
     // [1] - upper bound
     private double[] boundX, boundY;
-
-    public Mob(){
+    public Mob(int damage){
         setColor(Color.BLACK);
-
         boundX = new double[2];
         boundY = new double[2];
+
     }
-
-    /**
-     *
-     * @param hp the hp object
-     * @param lose how much hp to lose. In case of lifegiver it is negative (lose neg = pos)
-     * @return
-     */
-    public int damage(int hp, int lose ){
-        hp  += lose;
-        return hp;
+    public Mob(){
+        this(-1);
     }
-
-
+    public boolean setDamage(int damage, int min, int max){
+        boolean rtn = false;
+        if (damage >= min && damage <= max ){
+            this.damage = damage;
+            rtn = true;
+        }
+        return rtn;
+    }
+    public boolean setDamage(int damage){
+        boolean rtn = false;
+        if (setDamage(damage, -1, 1)){
+            this.damage = damage;
+            rtn = true;
+        }
+        return rtn;
+    }
+    public double getDamage(){
+        return this.damage;
+    }
     /**
      * Changes the velocity bounds in the x direction
      * @param lower the lower limit

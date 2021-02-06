@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 
 public class SpikedWall extends Obstacle{
     public SpikedWall(){
-        this(10, 80, 0);
+        this(10, 200, 0);
     }
     public SpikedWall(double width, double height, double x){
         setColor(Color.AQUA);
@@ -13,8 +13,5 @@ public class SpikedWall extends Obstacle{
         if (x < 20 || x > 300) {
             this.x = x;
         }
-    }
-    public int damage(int hp) {
-        return super.damage(hp, -1);
     }
 }

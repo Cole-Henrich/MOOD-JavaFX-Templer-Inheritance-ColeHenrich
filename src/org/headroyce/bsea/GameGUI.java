@@ -18,7 +18,6 @@ import java.security.Key;
 public class GameGUI extends StackPane {
 
     private GameLogic logic;
-
     private Canvas gameArea;
     private AnimationTimer animTimer;
 
@@ -90,6 +89,10 @@ public class GameGUI extends StackPane {
         if( event.getCode() == KeyCode.SPACE ){
             logic.applyForce(GameLogic.DIRECTION.STOP);
         }
+        if( event.getCode() == KeyCode.SPACE ){
+            logic.applyForce(GameLogic.DIRECTION.STOP);
+        }
+
     }
 
     /**

@@ -15,7 +15,7 @@ public class Ball extends Mob{
      * Creates a ball with a radius of one
      */
     public Ball(){
-        this(1);
+        this(10);
     }
 
     /**
@@ -23,7 +23,15 @@ public class Ball extends Mob{
      * @param radius the radius (in pixels) to set of the ball; Non-positives are reset to one
      */
     public Ball( double radius ){
-        setColor(Color.BLACK);
+        this (radius, Color.BLACK);
+        if( radius <= 0 ){
+            radius = 1;
+        }
+
+        this.radius = radius;
+    }
+    public Ball( double radius , Color COLOR){
+        setColor(COLOR);
         if( radius <= 0 ){
             radius = 1;
         }

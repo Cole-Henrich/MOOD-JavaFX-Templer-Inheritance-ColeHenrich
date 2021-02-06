@@ -22,7 +22,6 @@ public class Obstacle extends Mob {
      * @param height the height (in pixels) to set of the obstacle; Non-positives are reset to ten
      */
     public Obstacle( double width, double height ){
-
         setColor(Color.PURPLE);
         if( width <= 0 ){
             width = 10;

@@ -21,7 +21,8 @@ public class GameLogic {
         RIGHT,
         DOWN,
         STOP,
-        NONE
+        NONE,
+
     }
 
     // The game step in milliseconds
@@ -51,7 +52,7 @@ public class GameLogic {
     private static final int OBSTACLE_SPAWN_PROBABILITY = 10;
     private int ENEMY_SPAWN_TIMER = 150;
 
-
+    ArrayList<String>allHexes = getAllHexes();
     // Enemy Elements
     private ArrayList<Mob> enemies;
 
@@ -87,13 +88,11 @@ public class GameLogic {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         player.render(canvas);
-        for( int i = 0; i < enemies.size(); i++ ){
-            Mob enemy = enemies.get(i);
-
-            int min = (int)enemy.getWidth();
-            if( enemy.x < 0 ){
-                int maxW = (int)(width-min+1);
-                enemy.x = rand.nextInt(maxW-min+1)+min;
+        for (Mob enemy : enemies) {
+            int min = (int) enemy.getWidth();
+            if (enemy.x < 0) {
+                int maxW = (int) (width - min + 1);
+                enemy.x = rand.nextInt(maxW - min + 1) + min;
             }
 
             enemy.render(canvas);
@@ -205,7 +204,7 @@ public class GameLogic {
             long time_elapsed = (now - lastUpdate)/1000000;
 
             flashTimer -= time_elapsed;
-            if( flashTimer < 0 ){
+            if( flashTimer < 0){
                 player.setColor(Color.BLACK);
             }
 
@@ -221,19 +220,20 @@ public class GameLogic {
                 if( chance < OBSTACLE_SPAWN_PROBABILITY ){
 
                     if( chance < ENEMY_SPAWN_PROBABILITY ) {
-                        Ball enemy = new Ball();
-                        enemy.setRadius(10);
+                        LifeGiver lifeGiver = new LifeGiver();
+                        Ball  unAmigo = new Ball(10, Color.RED);
+                        Ball[] either = {lifeGiver, unAmigo};
+                        for (int i = 0; i < 2; i++) {
+                            Ball enemy = either[i];
+                            enemy.x = -1;
+                            enemy.y = -enemy.getRadius();  // off screen
+                            enemy.setVelocityBoundX(-5, 5);
+                            enemy.setVelocityBoundY(-5, 5);
 
-                        enemy.x = -1;
-                        enemy.y = -enemy.getRadius();  // off screen
-                        enemy.setVelocityBoundX(-5,5);
-                        enemy.setVelocityBoundY(-5,5);
-
-                        enemy.setColor(Color.RED);
-
-                        enemy.velX = rand.nextInt(5) + 2;
-                        enemy.velY = rand.nextInt(5) + 2;
-                        enemies.add(enemy);
+                            enemy.velX = rand.nextInt(5) + 2;
+                            enemy.velY = rand.nextInt(5) + 2;
+                            enemies.add(enemy);
+                        }
                     }
                     else{
                         Obstacle enemy = new Obstacle();
@@ -274,10 +274,8 @@ public class GameLogic {
 
                 // MOVE EVERYTHING
                 player.move();
-                for( int i = 0; i < enemies.size(); i++ ){
-                    Mob enemy = enemies.get(i);
-
-                    if( enemy instanceof Ball) {
+                for (Mob enemy : enemies) {
+                    if (enemy instanceof Ball) {
                         if (rand.nextInt(100) < ENEMY_DIRECTION_PROBABILITY &&
                                 enemy.getColor() == Color.RED
                         ) {
@@ -291,10 +289,6 @@ public class GameLogic {
 
                     enemy.move();
                 }
-
-
-
-
                 // CHECK WALLS ON EVERYTHING
                 boolean playerCollided = collideWalls(player);
                 for( int i = 0; i < enemies.size(); i++ ){
@@ -308,6 +302,7 @@ public class GameLogic {
                 }
 
                 // CHECK BALL COLLISIONS ON EVERYTHING
+                double hpDamage = 0;
                 for( int i = 0; i < enemies.size(); i++ ) {
                     Mob enemy = enemies.get(i);
                     for( int j = i + 1; j < enemies.size(); j++ ) {
@@ -317,7 +312,6 @@ public class GameLogic {
                             j -= 2;
                         }
                     }
-
                     boolean enemyRemove = enemy.intersects(player);
                     if( enemyRemove ){
                         player.velX = enemy.velX;
@@ -326,24 +320,59 @@ public class GameLogic {
                         i--;
                     }
                     playerCollided =  enemyRemove || playerCollided;
+                    if (enemyRemove) {
+                        hpDamage = enemy.getDamage();
+                    }
                 }
 
                 if( playerCollided ){
+                    player.addHP(hpDamage);
                     // Stops lives being lost if green
                     if( flashTimer <= 0 ){
-                        player.addHP(-1);
                         if( player.getHP() <= 0 ) {
                             gameOver = true;
                             pause(true);
                         }
                     }
-
                     flashTimer = PLAYER_FLASH_TIME;
-                    player.setColor(Color.GREEN);
+                    player.setColor(getRandomColor());
                 }
 
                 lastUpdate = now;
             }
         }
+    }
+
+    /**
+     * @return a random color
+     */
+    private Color getRandomColor(){
+        int hexMax = (int) Math.pow(16, 6);
+        int random = (int) (Math.random() *(hexMax));
+        return Color.web(allHexes.get(random));
+    }
+
+    /**
+     * @return all of the possible hexes
+     */
+    private ArrayList<String> getAllHexes() {
+        char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        String hexCode = "";
+        ArrayList<String>hexCodes = new ArrayList<>();
+        for (char c2 : hexadecimal) {
+            for (char c1 : hexadecimal) {
+                for (char element : hexadecimal) {
+                    for (char item : hexadecimal) {
+                        for (char value : hexadecimal) {
+                            for (char c : hexadecimal) {
+                                hexCode = ("#" + c2 + "" + c1 + "" + element + "" + item + "" + value + "" + c + "");
+                                hexCodes.add(hexCode);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return hexCodes;
     }
 }
