@@ -123,7 +123,6 @@ public class Ball extends Mob{
 
     public void render( Canvas canvas ){
         GraphicsContext gc = canvas.getGraphicsContext2D();
-
         gc.setFill(this.getColor());
         gc.fillOval(x,y, 2*radius, 2*radius);
     }

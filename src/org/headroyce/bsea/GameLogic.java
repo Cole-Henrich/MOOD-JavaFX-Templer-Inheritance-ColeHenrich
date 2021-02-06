@@ -228,10 +228,10 @@ public class GameLogic {
                             enemy.x = -1;
                             enemy.y = -enemy.getRadius();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
-                            enemy.setVelocityBoundY(-5, 5);
+                            enemy.setVelocityBoundY(0, 5);
 
                             enemy.velX = rand.nextInt(5) + 2;
-                            enemy.velY = rand.nextInt(5) + 2;
+                            enemy.velY = rand.nextInt(5)+5;
                             enemies.add(enemy);
                         }
                     }
@@ -240,9 +240,10 @@ public class GameLogic {
                         enemy.x = -1;
                         enemy.y = -enemy.getHeight();  // off screen
                         enemy.setVelocityBoundX(-5,5);
-                        enemy.setVelocityBoundY(-5,5);
+                        enemy.setVelocityBoundY(0,10);
 
-                        enemy.velY = 10;
+                        enemy.velY = 5;
+
                         enemies.add(enemy);
                     }
 
@@ -314,15 +315,14 @@ public class GameLogic {
                     }
                     boolean enemyRemove = enemy.intersects(player);
                     if( enemyRemove ){
+                        hpDamage = enemy.getDamage();
                         player.velX = enemy.velX;
                         player.velY = enemy.velY;
                         enemies.remove(enemy);
                         i--;
                     }
                     playerCollided =  enemyRemove || playerCollided;
-                    if (enemyRemove) {
-                        hpDamage = enemy.getDamage();
-                    }
+
                 }
 
                 if( playerCollided ){
