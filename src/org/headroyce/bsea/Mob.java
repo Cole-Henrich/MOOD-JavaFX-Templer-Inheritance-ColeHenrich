@@ -257,7 +257,7 @@ public class Mob {
         if( this.y > other.y + other.getHeight()){
             return false;
         }
-
+        
         return true;
     }
 

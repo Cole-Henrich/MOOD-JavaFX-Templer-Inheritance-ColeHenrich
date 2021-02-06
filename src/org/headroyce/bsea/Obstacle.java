@@ -8,20 +8,24 @@ import javafx.scene.paint.Color;
 /**
  * Represents an rectangular obstacle
  */
+
 public class Obstacle extends Mob {
+   public GameLogic logic = new GameLogic(getWidth(), getHeight());
     /**
      * Creates an obstacle with a width of ten and height of five
      */
     public Obstacle(){
         this(10, 40);
     }
-
+    public Obstacle(double x){
+        this(10, 40);
+    }
     /**
      * Creates an obstacle with a custom width and height (in pixels)
      * @param width the width (in pixels) to set of the obstacle; Non-positives are reset to ten
      * @param height the height (in pixels) to set of the obstacle; Non-positives are reset to ten
      */
-    public Obstacle( double width, double height ){
+    public Obstacle( double width, double height){
         setColor(Color.PURPLE);
         if( width <= 0 ){
             width = 10;

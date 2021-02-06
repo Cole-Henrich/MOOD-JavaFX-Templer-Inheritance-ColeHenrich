@@ -38,7 +38,7 @@ public class GameLogic {
     private HashMap<DIRECTION, Boolean> forcesOnPlayer;
 
     private static final int PLAYER_FLASH_TIME = 500;
-    private int flashTimer = 0;
+    private int flashTimer = 500;
 
     private static final int PLAYER_SCORING_TIME = 5000;
     private int PLAYER_SCORING_TIMER = 5000;
@@ -82,7 +82,7 @@ public class GameLogic {
     public void render(Canvas canvas){
 
         // Update width and height
-        width = canvas.getWidth();
+        double width = canvas.getWidth();
         height = canvas.getHeight();
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -120,7 +120,7 @@ public class GameLogic {
 
     public void reset(){
         player.x = 200;
-        player.y = 400;
+        player.y = 200;
         player.setRadius(10);
 
         player.velX = player.velY = 0;
@@ -236,19 +236,25 @@ public class GameLogic {
                         }
                     }
                     else{
-                        Obstacle enemy = new Obstacle();
-                        enemy.x = -1;
-                        enemy.y = -enemy.getHeight();  // off screen
-                        enemy.setVelocityBoundX(-5,5);
-                        enemy.setVelocityBoundY(0,10);
-
-                        enemy.velY = 5;
-
-                        enemies.add(enemy);
+                        double spikeX = 0;
+                        if (Math.random() < 0.5){
+                            spikeX = -1;
+                        }
+                        if (Math.random() >= 0.5){
+                            spikeX = width;
+                        }
+                        Obstacle obstacle = new Obstacle();
+                        SpikedWall spikedWall = new SpikedWall(20, 200, spikeX , getRandomColor());
+                        Obstacle[] rectangles = {obstacle, spikedWall};
+                        for (Obstacle enemy: rectangles) {
+                            enemy.y = -enemy.getHeight();  // off screen
+                            enemy.setVelocityBoundX(-5,5);
+                            enemy.setVelocityBoundY(0,10);
+                            enemy.velY = 5;
+                            enemies.add(enemy);
+                        }
                     }
-
                 }
-
                 ENEMY_SPAWN_TIMER = ENEMY_SPAWN_TIME;
             }
 
@@ -337,7 +343,6 @@ public class GameLogic {
                     flashTimer = PLAYER_FLASH_TIME;
                     player.setColor(getRandomColor());
                 }
-
                 lastUpdate = now;
             }
         }

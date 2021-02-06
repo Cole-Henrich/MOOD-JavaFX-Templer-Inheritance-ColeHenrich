@@ -75,9 +75,11 @@ public class GameGUI extends StackPane {
     public void handleKeyPress(KeyEvent event){
         if( event.getCode() == KeyCode.A){
             logic.applyForce(GameLogic.DIRECTION.LEFT);
+            System.err.println(">>A");
         }
         if( event.getCode() == KeyCode.D ) {
             logic.applyForce(GameLogic.DIRECTION.RIGHT);
+            System.err.println(">>D");
         }
         if( event.getCode() == KeyCode.W ) {
             logic.applyForce(GameLogic.DIRECTION.UP);
@@ -102,9 +104,11 @@ public class GameGUI extends StackPane {
     public void handleKeyRelease(KeyEvent event){
         if( event.getCode() == KeyCode.A){
             logic.removeForce(GameLogic.DIRECTION.LEFT);
+            System.err.println("D<<");
         }
         if( event.getCode() == KeyCode.D ) {
             logic.removeForce(GameLogic.DIRECTION.RIGHT);
+            System.err.println("D<<");
         }
         if( event.getCode() == KeyCode.W ) {
             logic.removeForce(GameLogic.DIRECTION.UP);
