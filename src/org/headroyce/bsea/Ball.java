@@ -23,19 +23,23 @@ public class Ball extends Mob{
      * @param radius the radius (in pixels) to set of the ball; Non-positives are reset to one
      */
     public Ball( double radius ){
-        this (radius, Color.BLACK);
+        this (radius, Color.BLACK, 0);
         if( radius <= 0 ){
             radius = 1;
         }
 
         this.radius = radius;
     }
-    public Ball( double radius , Color COLOR){
+    public Ball( double radius , Color COLOR, int damage){
         setColor(COLOR);
         if( radius <= 0 ){
             radius = 1;
         }
         this.radius = radius;
+    }
+    public Ball (int damage){
+        this(10, Color.RED, -1);
+        setDamage(damage);
     }
 
     /**

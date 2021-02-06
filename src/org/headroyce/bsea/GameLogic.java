@@ -221,7 +221,7 @@ public class GameLogic {
 
                     if( chance < ENEMY_SPAWN_PROBABILITY ) {
                         LifeGiver lifeGiver = new LifeGiver();
-                        Ball  unAmigo = new Ball(10, Color.RED);
+                        Ball unAmigo = new Ball(-1);
                         Ball[] either = {lifeGiver, unAmigo};
                         for (int i = 0; i < 2; i++) {
                             Ball enemy = either[i];
