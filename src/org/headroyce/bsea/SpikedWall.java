@@ -3,6 +3,7 @@ package org.headroyce.bsea;
 import javafx.scene.paint.Color;
 
 public class SpikedWall extends Obstacle{
+
     public SpikedWall(double x){
         this(20, 200, x, Color.AQUA);
     }

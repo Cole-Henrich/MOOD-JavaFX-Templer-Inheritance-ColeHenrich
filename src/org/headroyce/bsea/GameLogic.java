@@ -27,18 +27,19 @@ public class GameLogic {
 
     // The game step in milliseconds
     public static final int GAME_STEP_TIMER = 17;
-    private GameTimer gameTimer;
+    private final GameTimer gameTimer;
 
     private boolean gameOver;
 
-    private Random rand;
+    private final Random rand;
 
     // The player
-    private Ball player;
-    private HashMap<DIRECTION, Boolean> forcesOnPlayer;
+    private final Ball player;
+    private final HashMap<DIRECTION, Boolean> forcesOnPlayer;
 
     private static final int PLAYER_FLASH_TIME = 500;
-    private int flashTimer = 500;
+    // Enemy Elements
+    private final ArrayList<Mob> enemies;
 
     private static final int PLAYER_SCORING_TIME = 5000;
     private int PLAYER_SCORING_TIMER = 5000;
@@ -52,14 +53,13 @@ public class GameLogic {
     private static final int OBSTACLE_SPAWN_PROBABILITY = 10;
     private int ENEMY_SPAWN_TIMER = 150;
 
-    ArrayList<String>allHexes = getAllHexes();
-    // Enemy Elements
-    private ArrayList<Mob> enemies;
+    ArrayList<String> allHexes = getAllHexes();
+    private int flashTimer = 0;
 
     // Width and height of the canvas
     private double width, height;
 
-    public GameLogic(double width, double height){
+    public GameLogic(double width, double height) {
         rand = new Random();
 
         gameTimer = new GameTimer();
@@ -82,7 +82,7 @@ public class GameLogic {
     public void render(Canvas canvas){
 
         // Update width and height
-        double width = canvas.getWidth();
+        width = canvas.getWidth();
         height = canvas.getHeight();
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -120,7 +120,7 @@ public class GameLogic {
 
     public void reset(){
         player.x = 200;
-        player.y = 200;
+        player.y = 400;
         player.setRadius(10);
 
         player.velX = player.velY = 0;
@@ -231,30 +231,28 @@ public class GameLogic {
                             enemy.setVelocityBoundY(0, 5);
 
                             enemy.velX = rand.nextInt(5) + 2;
-                            enemy.velY = rand.nextInt(5)+5;
+                            enemy.velY = rand.nextInt(5) + 5;
                             enemies.add(enemy);
                         }
-                    }
-                    else{
-                        double spikeX = 0;
-                        if (Math.random() < 0.5){
-                            spikeX = -1;
-                        }
-                        if (Math.random() >= 0.5){
-                            spikeX = width;
-                        }
+                    } else {
+                        double RANDOM = Math.random() * width;
+                        SpikedWall spikedWall = new SpikedWall(RANDOM);
                         Obstacle obstacle = new Obstacle();
-                        SpikedWall spikedWall = new SpikedWall(20, 200, spikeX , getRandomColor());
-                        Obstacle[] rectangles = {obstacle, spikedWall};
-                        for (Obstacle enemy: rectangles) {
+                        Obstacle[] rectangles = {spikedWall, obstacle};
+                        for (Obstacle enemy : rectangles) {
+                            enemy.x = -1;
                             enemy.y = -enemy.getHeight();  // off screen
-                            enemy.setVelocityBoundX(-5,5);
-                            enemy.setVelocityBoundY(0,10);
+                            enemy.setVelocityBoundX(-5, 5);
+                            enemy.setVelocityBoundY(0, 10);
+
                             enemy.velY = 5;
+
                             enemies.add(enemy);
                         }
                     }
+
                 }
+
                 ENEMY_SPAWN_TIMER = ENEMY_SPAWN_TIME;
             }
 
@@ -343,6 +341,7 @@ public class GameLogic {
                     flashTimer = PLAYER_FLASH_TIME;
                     player.setColor(getRandomColor());
                 }
+
                 lastUpdate = now;
             }
         }
