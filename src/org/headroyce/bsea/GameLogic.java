@@ -52,8 +52,6 @@ public class GameLogic {
     private static final int ENEMY_SPAWN_PROBABILITY = 5;
     private static final int OBSTACLE_SPAWN_PROBABILITY = 10;
     private int ENEMY_SPAWN_TIMER = 150;
-
-    ArrayList<String> allHexes = getAllHexes();
     private int flashTimer = 0;
 
     // Width and height of the canvas
@@ -177,12 +175,34 @@ public class GameLogic {
         return collided;
     }
 
-    public void applyForce( DIRECTION direction ) {
+    public void applyForce(DIRECTION direction) {
         forcesOnPlayer.put(direction, true);
     }
 
-    public void removeForce(DIRECTION direction){
+    public void removeForce(DIRECTION direction) {
         forcesOnPlayer.remove(direction);
+    }
+
+    /**
+     * Hecka more efficient than generating 16^6 Strings and picking one at random.
+     * Compare: 16^6 iterations vs. 6 iterations
+     * It's not even funny how much more efficient this is.
+     * Brain just dropped a big realization about how dumb the old way was.
+     * Here's how: it picks a char at random from the valid hexchars 0-9, A-F,
+     * and appends those to a StringBuilder. It then returns Color.web(String.valueOf(hexcode));
+     *
+     * @return any random color.
+     * @🤯 woah.
+     */
+    private Color getRandomColor_MoreEfficiently() {
+        char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        StringBuilder hexcode = new StringBuilder();
+        hexcode.append("#");
+        for (int i = 0; i < 6; i++) {
+            int random = (int) (Math.random() * hexadecimal.length);
+            hexcode.append(hexadecimal[random]);
+        }
+        return Color.web(String.valueOf(hexcode));
     }
 
     /**
@@ -339,44 +359,11 @@ public class GameLogic {
                         }
                     }
                     flashTimer = PLAYER_FLASH_TIME;
-                    player.setColor(getRandomColor());
+                    player.setColor(getRandomColor_MoreEfficiently());
                 }
 
                 lastUpdate = now;
             }
         }
-    }
-
-    /**
-     * @return a random color
-     */
-    private Color getRandomColor(){
-        int hexMax = (int) Math.pow(16, 6);
-        int random = (int) (Math.random() *(hexMax));
-        return Color.web(allHexes.get(random));
-    }
-
-    /**
-     * @return all of the possible hexes
-     */
-    private ArrayList<String> getAllHexes() {
-        char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-        String hexCode = "";
-        ArrayList<String>hexCodes = new ArrayList<>();
-        for (char c2 : hexadecimal) {
-            for (char c1 : hexadecimal) {
-                for (char element : hexadecimal) {
-                    for (char item : hexadecimal) {
-                        for (char value : hexadecimal) {
-                            for (char c : hexadecimal) {
-                                hexCode = ("#" + c2 + "" + c1 + "" + element + "" + item + "" + value + "" + c + "");
-                                hexCodes.add(hexCode);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return hexCodes;
     }
 }
