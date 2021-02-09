@@ -255,12 +255,14 @@ public class GameLogic {
                             enemies.add(enemy);
                         }
                     } else {
-                        double RANDOM = Math.random() * width;
-                        SpikedWall spikedWall = new SpikedWall(RANDOM);
+                        double spikeX = 1;
+                        if (Math.random() > 0.5) {
+                            spikeX = width;
+                        }
+                        SpikedWall spikedWall = new SpikedWall(spikeX, Math.random() * ((width * 0.4) - 5) + 5); //thank you rosses
                         Obstacle obstacle = new Obstacle();
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
-                            enemy.x = -1;
                             enemy.y = -enemy.getHeight();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
                             enemy.setVelocityBoundY(0, 10);
