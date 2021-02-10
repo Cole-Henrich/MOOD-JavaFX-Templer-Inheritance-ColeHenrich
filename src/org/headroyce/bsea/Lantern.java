@@ -7,25 +7,26 @@ public class Lantern extends Ball {
         super(30, color, -1, 100);
     }
 
-    /**
-     * Hecka more efficient than generating 16^6 Strings and picking one at random.
-     * Compare: 16^6 iterations vs. 6 iterations
-     * It's not even funny how much more efficient this is.
-     * Brain just dropped a big realization about how dumb the old way was.
-     * Here's how: it picks a char at random from the valid hexchars 0-9, A-F,
-     * and appends those to a StringBuilder. It then returns Color.web(String.valueOf(hexcode));
-     *
-     * @return any random color.
-     * @🤯 woah.
-     */
-    private javafx.scene.paint.Color getRandomColor_MoreEfficiently() {
-        char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-        StringBuilder hexcode = new StringBuilder();
-        hexcode.append("#");
-        for (int i = 0; i < 6; i++) {
-            int random = (int) (Math.random() * hexadecimal.length);
-            hexcode.append(hexadecimal[random]);
+    String[] pinkHexes = {"#FFC0CB", "#FFB6C1", "#FF69B4", "#FF1493", "#DB7093", "#C71585", "#E6E6FA", "#D8BFD8", "#DDA0DD", "#DA70D6", "#EE82EE", "#FF00FF", "#FF00FF", "#BA55D3", "#9932CC", "#9400D3", "#8A2BE2", "#8B008B", "#800080", "#6A0DAD", "#9370DB", "#7B68EE", "#6A5ACD", "#483D8B", "#663399", "#4B0082"};
+    String[] greenHexes = {"#ADFF2F", "#7FFF00", "#7CFC00", "#00FF00", "#32CD32", "#98FB98", "#90EE90", "#00FA9A", "#00FF7F", "#3CB371", "#2E8B57", "#228B22", "#008000", "#006400", "#9ACD32", "#6B8E23", "#556B2F", "#66CDAA", "#8FBC8F", "#20B2AA", "#008B8B", "#008080"};
+
+    private boolean checkColors(Color color, String[] hexes) {
+        boolean rtn = false;
+        for (String hex : hexes) {
+            Color c = Color.web(hex);
+            if (c == color) {
+                rtn = true;
+            }
         }
-        return javafx.scene.paint.Color.web(String.valueOf(hexcode));
+        return rtn;
+    }
+
+    public boolean isSpawnColor(Color color) {
+        return (checkColors(color, pinkHexes));
+    }
+
+    public boolean isHealthColor(Color color) {
+        return checkColors(color, greenHexes);
     }
 }
+

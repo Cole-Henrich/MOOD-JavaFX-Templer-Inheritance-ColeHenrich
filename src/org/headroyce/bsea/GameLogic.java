@@ -42,7 +42,7 @@ public class GameLogic {
     private final ArrayList<Mob> enemies;
 
     private static final int PLAYER_SCORING_TIME = 1000;
-    private static final int PLAYER_SCORING_POINTS = 10;
+    private static final int PLAYER_SCORING_POINTS = 0;
     private int PLAYER_SCORING_TIMER = 1000;
     private int playerScore = 0;
 
@@ -182,17 +182,7 @@ public class GameLogic {
         forcesOnPlayer.remove(direction);
     }
 
-    /**
-     * Hecka more efficient than generating 16^6 Strings and picking one at random.
-     * Compare: 16^6 iterations vs. 6 iterations
-     * It's not even funny how much more efficient this is.
-     * Brain just dropped a big realization about how dumb the old way was.
-     * Here's how: it picks a char at random from the valid hexchars 0-9, A-F,
-     * and appends those to a StringBuilder. It then returns Color.web(String.valueOf(hexcode));
-     *
-     * @return any random color.
-     * @🤯 woah.
-     */
+
     private Color getRandomColor_MoreEfficiently() {
         char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
         StringBuilder hexcode = new StringBuilder();
@@ -239,16 +229,30 @@ public class GameLogic {
                 if( chance < OBSTACLE_SPAWN_PROBABILITY ){
 
                     if( chance < ENEMY_SPAWN_PROBABILITY ) {
+                        ArrayList<Ball> either = new ArrayList<>();
                         LifeGiver lifeGiver = new LifeGiver();
                         Ball unAmigo = new Ball(-1);
                         Lantern lantern = new Lantern(getRandomColor_MoreEfficiently());
-                        Ball[] either = {lifeGiver, unAmigo, lantern};
+                        if (lantern.isHealthColor(lantern.getColor())) {
+                            lantern.setRadius(20);
+                            lantern.setDamage(1);
+                        }
+                        if (lantern.isSpawnColor(lantern.getColor())) {
+                            lantern.setRadius(40);
+                            lantern.setDamage(-2);
+                            for (int i = 0; i < 30; i++) {
+                                Ball sprinkles = new Ball(7, getRandomColor_MoreEfficiently(), -1, 200);
+                                either.add(sprinkles);
+                            }
+                        }
+                        either.add(lifeGiver);
+                        either.add(unAmigo);
+                        either.add(lantern);
                         for (Ball enemy : either) {
                             enemy.x = -1;
                             enemy.y = -enemy.getRadius();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
                             enemy.setVelocityBoundY(0, 5);
-
                             enemy.velX = rand.nextInt(5) + 2;
                             enemy.velY = rand.nextInt(5) + 5;
                             enemies.add(enemy);
@@ -259,15 +263,13 @@ public class GameLogic {
                             spikeX = width;
                         }
                         SpikedWall spikedWall = new SpikedWall(spikeX, Math.random() * ((width * 0.4) - 5) + 5); //thank you rosses
-                        Obstacle obstacle = new Obstacle();
+                        Obstacle obstacle = new Obstacle(Math.random() * width);
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
                             enemy.y = -enemy.getHeight();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
                             enemy.setVelocityBoundY(0, 10);
-
                             enemy.velY = 5;
-
                             enemies.add(enemy);
                         }
                     }
@@ -324,8 +326,8 @@ public class GameLogic {
                     Mob enemy = enemies.get(i);
                     collideWalls(enemy);
                     if (enemy.y > height) {
-                        playerScore += enemy.getDamage();
                         enemies.remove(enemy);
+                        System.out.println(enemy.getOffPoints());
                         playerScore += enemy.getOffPoints();
                         i--;
                     }
@@ -352,7 +354,6 @@ public class GameLogic {
                         i--;
                     }
                     playerCollided =  enemyRemove || playerCollided;
-
                 }
 
                 if( playerCollided ){

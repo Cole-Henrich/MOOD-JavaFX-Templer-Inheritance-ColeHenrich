@@ -38,9 +38,6 @@ public class Obstacle extends Mob {
         this(width, height);
     }
 
-    public Obstacle() {
-    }
-
     /**
      * Check to see if the obstacle overlaps with a ball (circular)
      *

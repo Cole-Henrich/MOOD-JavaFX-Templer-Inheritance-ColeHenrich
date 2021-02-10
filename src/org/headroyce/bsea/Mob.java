@@ -19,7 +19,7 @@ public class Mob {
     private double offPoints;
 
     public Mob() {
-        this(-1, 0);
+        this(-1, 100);
     }
 
     public Mob(int damage, int offPoints) {
