@@ -184,6 +184,10 @@ public class GameLogic {
 
 
     private Color getRandomColor_MoreEfficiently() {
+        return Color.web(getRandomHex_MoreEfficiently());
+    }
+
+    private String getRandomHex_MoreEfficiently() {
         char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
         StringBuilder hexcode = new StringBuilder();
         hexcode.append("#");
@@ -191,7 +195,7 @@ public class GameLogic {
             int random = (int) (Math.random() * hexadecimal.length);
             hexcode.append(hexadecimal[random]);
         }
-        return Color.web(String.valueOf(hexcode));
+        return String.valueOf(hexcode);
     }
 
     /**
@@ -232,16 +236,20 @@ public class GameLogic {
                         ArrayList<Ball> either = new ArrayList<>();
                         LifeGiver lifeGiver = new LifeGiver();
                         Ball unAmigo = new Ball(-1);
-                        Lantern lantern = new Lantern(getRandomColor_MoreEfficiently());
-                        if (lantern.isHealthColor(lantern.getColor())) {
-                            lantern.setRadius(20);
-                            lantern.setDamage(1);
-                        }
-                        if (lantern.isSpawnColor(lantern.getColor())) {
+                        String hex = getRandomHex_MoreEfficiently();
+                        Color color = Color.web(hex);
+                        Lantern lantern = new Lantern(color);
+
+                        if (lantern.isSpawnColor(lantern.getColor()) || hex.charAt(1) == 'F') {
                             lantern.setRadius(40);
                             lantern.setDamage(-2);
+                            lantern.x = 300;
+                            lantern.y = 300;
+
                             for (int i = 0; i < 30; i++) {
-                                Ball sprinkles = new Ball(7, getRandomColor_MoreEfficiently(), -1, 200);
+                                Ball sprinkles = new Ball(5, getRandomColor_MoreEfficiently(), -1, 200);
+                                sprinkles.x = 100;
+                                sprinkles.y = 100;
                                 either.add(sprinkles);
                             }
                         }
