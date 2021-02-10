@@ -1,6 +1,5 @@
 package org.headroyce.bsea;
 
-import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -15,35 +14,46 @@ public class Ball extends Mob{
      * Creates a ball with a radius of one
      */
     public Ball(){
-        this(10);
+        this(10, 200);
     }
 
     /**
      * Creates a ball with a custom radius (in pixels)
+     *
      * @param radius the radius (in pixels) to set of the ball; Non-positives are reset to one
      */
-    public Ball( double radius ){
-        this (radius, Color.BLACK, 0);
-        if( radius <= 0 ){
+    public Ball(double radius, int offPoints) {
+        this(radius, Color.BLACK, 0, offPoints);
+        if (radius <= 0) {
             radius = 1;
         }
 
         this.radius = radius;
     }
-    public Ball( double radius , Color COLOR, int damage){
+
+    public Ball(double radius, Color COLOR, int damage, int offPoints) {
         setColor(COLOR);
-        if( radius <= 0 ){
+        if (radius <= 0) {
             radius = 1;
         }
         this.radius = radius;
     }
-    public Ball (int damage){
-        this(10, Color.RED, -1);
+
+    public Ball(double radius, int damage, int offPoints) {
+        if (radius <= 0) {
+            radius = 1;
+        }
+        this.radius = radius;
+    }
+
+    public Ball(int damage) {
+        this(10, Color.RED, -1, 200);
         setDamage(damage);
     }
 
     /**
      * Set the radius of this object.  A ball's radius must be positive.
+     *
      * @param radius the new, positive, radius of this object
      * @return true if the radius is set, false if radius is not changed
      */

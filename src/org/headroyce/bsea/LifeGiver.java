@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 
 public class LifeGiver extends Ball {
     public LifeGiver(){
-        this(10, Color.DARKGREEN, 1);
+        this(10, Color.DARKGREEN, 200);
     }
     public LifeGiver(double radius, Color COLOR, int damage){
         setColor(COLOR);

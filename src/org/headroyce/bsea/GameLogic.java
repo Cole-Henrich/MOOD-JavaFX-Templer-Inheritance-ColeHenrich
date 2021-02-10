@@ -41,10 +41,9 @@ public class GameLogic {
     // Enemy Elements
     private final ArrayList<Mob> enemies;
 
-    private static final int PLAYER_SCORING_TIME = 5000;
-    private int PLAYER_SCORING_TIMER = 5000;
-
-    private static final int PLAYER_SCORING_POINTS = 2;
+    private static final int PLAYER_SCORING_TIME = 1000;
+    private static final int PLAYER_SCORING_POINTS = 10;
+    private int PLAYER_SCORING_TIMER = 1000;
     private int playerScore = 0;
 
     private static final int ENEMY_SPAWN_TIME = 150;
@@ -242,9 +241,9 @@ public class GameLogic {
                     if( chance < ENEMY_SPAWN_PROBABILITY ) {
                         LifeGiver lifeGiver = new LifeGiver();
                         Ball unAmigo = new Ball(-1);
-                        Ball[] either = {lifeGiver, unAmigo};
-                        for (int i = 0; i < 2; i++) {
-                            Ball enemy = either[i];
+                        Lantern lantern = new Lantern(getRandomColor_MoreEfficiently());
+                        Ball[] either = {lifeGiver, unAmigo, lantern};
+                        for (Ball enemy : either) {
                             enemy.x = -1;
                             enemy.y = -enemy.getRadius();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
@@ -317,13 +316,17 @@ public class GameLogic {
                     enemy.move();
                 }
                 // CHECK WALLS ON EVERYTHING
+                if (collideWalls(player)) {
+                    player.addHP(-1);
+                }
                 boolean playerCollided = collideWalls(player);
-                for( int i = 0; i < enemies.size(); i++ ){
+                for (int i = 0; i < enemies.size(); i++) {
                     Mob enemy = enemies.get(i);
                     collideWalls(enemy);
-
-                    if( enemy.y > height ){
+                    if (enemy.y > height) {
+                        playerScore += enemy.getDamage();
                         enemies.remove(enemy);
+                        playerScore += enemy.getOffPoints();
                         i--;
                     }
                 }
@@ -340,8 +343,9 @@ public class GameLogic {
                         }
                     }
                     boolean enemyRemove = enemy.intersects(player);
-                    if( enemyRemove ){
-                        hpDamage = enemy.getDamage();
+                    if( enemyRemove ) {
+                        playerScore -= 100;
+                        player.addHP(enemy.getDamage());
                         player.velX = enemy.velX;
                         player.velY = enemy.velY;
                         enemies.remove(enemy);
@@ -352,7 +356,6 @@ public class GameLogic {
                 }
 
                 if( playerCollided ){
-                    player.addHP(hpDamage);
                     // Stops lives being lost if green
                     if( flashTimer <= 0 ){
                         if( player.getHP() <= 0 ) {

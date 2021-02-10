@@ -2,56 +2,66 @@ package org.headroyce.bsea;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Mob {
     private Color color;
     private double hp;
     private double damage;
+    // [0] - lower bound
+    // [1] - upper bound
+    private final double[] boundX;
     private double width, height;
 
     public double x, y;         // Center point of the circle
     public double velX, velY;
+    private final double[] boundY;
+    private double offPoints;
 
-    // [0] - lower bound
-    // [1] - upper bound
-    private double[] boundX, boundY;
-    public Mob(int damage){
+    public Mob() {
+        this(-1, 0);
+    }
+
+    public Mob(int damage, int offPoints) {
         setColor(Color.BLACK);
         boundX = new double[2];
         boundY = new double[2];
+    }
 
-    }
-    public Mob(){
-        this(-1);
-    }
-    public boolean setDamage(int damage, int min, int max){
+    public boolean setDamage(int damage, int min, int max) {
         boolean rtn = false;
-        if (damage >= min && damage <= max ){
+        if (damage >= min && damage <= max) {
             this.damage = damage;
             rtn = true;
         }
         return rtn;
     }
-    public boolean setDamage(int damage){
+
+    public boolean setDamage(int damage) {
         boolean rtn = false;
-        if (setDamage(damage, -1, 1)){
+        if (setDamage(damage, -1, 1)) {
             this.damage = damage;
             rtn = true;
         }
         return rtn;
     }
-    public double getDamage(){
+
+    public double getOffPoints() {
+        return this.offPoints;
+    }
+
+    public double getDamage() {
         return this.damage;
     }
+
     /**
      * Changes the velocity bounds in the x direction
+     *
      * @param lower the lower limit
      * @param upper the upper limit
      * @return true if bounds have changed, false if lower > upper
      */
-    public boolean setVelocityBoundX( double lower, double upper ) {
+    public boolean setVelocityBoundX(double lower, double upper) {
         if( lower > upper ) {
             return false;
         }
@@ -99,7 +109,6 @@ public class Mob {
         rtn[1] = boundY[1];
         return rtn;
     }
-
     /**
      * Sets the color of the ball
      * @param c the new color of the ball (cannot be null)
@@ -254,11 +263,7 @@ public class Mob {
         if( this.y + this.getHeight() < other.y ){
             return false;
         }
-        if( this.y > other.y + other.getHeight()){
-            return false;
-        }
-        
-        return true;
+        return !(this.y > other.y + other.getHeight());
     }
 
     public void render( Canvas canvas ){ }
