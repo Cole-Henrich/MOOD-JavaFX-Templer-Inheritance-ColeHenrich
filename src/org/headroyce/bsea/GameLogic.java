@@ -44,7 +44,7 @@ public class GameLogic {
     private static final int PLAYER_SCORING_TIME = 1000;
     private static final int PLAYER_SCORING_POINTS = 0;
     private int PLAYER_SCORING_TIMER = 1000;
-    private int playerScore = 0;
+    public int playerScore = 0;
 
     private static final int ENEMY_SPAWN_TIME = 150;
     private static final int ENEMY_DIRECTION_PROBABILITY = 5;
@@ -91,7 +91,6 @@ public class GameLogic {
                 int maxW = (int) (width - min + 1);
                 enemy.x = rand.nextInt(maxW - min + 1) + min;
             }
-
             enemy.render(canvas);
         }
 
@@ -245,7 +244,6 @@ public class GameLogic {
                             lantern.setDamage(-2);
                             lantern.x = 300;
                             lantern.y = 300;
-
                             for (int i = 0; i < 30; i++) {
                                 Ball sprinkles = new Ball(5, getRandomColor_MoreEfficiently(), -1, 200);
                                 sprinkles.x = 100;
@@ -271,19 +269,20 @@ public class GameLogic {
                             spikeX = width;
                         }
                         SpikedWall spikedWall = new SpikedWall(spikeX, Math.random() * ((width * 0.4) - 5) + 5); //thank you rosses
-                        Obstacle obstacle = new Obstacle(Math.random() * width);
+                        Obstacle obstacle = new Obstacle();
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
-                            enemy.y = -enemy.getHeight();  // off screen
+                            if (enemy != null) {
+                                System.out.println(" new obstacle: " + enemy.getClass() + "  " + enemy.x);
+                            }
+                            enemy.y = -1 * enemy.getHeight();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
                             enemy.setVelocityBoundY(0, 10);
                             enemy.velY = 5;
                             enemies.add(enemy);
                         }
                     }
-
                 }
-
                 ENEMY_SPAWN_TIMER = ENEMY_SPAWN_TIME;
             }
 
@@ -335,8 +334,9 @@ public class GameLogic {
                     collideWalls(enemy);
                     if (enemy.y > height) {
                         enemies.remove(enemy);
-                        System.out.println(enemy.getOffPoints());
+                        System.out.println(enemy.getClass() + " " + enemy.getOffPoints());
                         playerScore += enemy.getOffPoints();
+                        System.out.println(playerScore);
                         i--;
                     }
                 }

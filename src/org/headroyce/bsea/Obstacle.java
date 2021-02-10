@@ -13,9 +13,11 @@ public class Obstacle extends Mob {
     /**
      * Creates an obstacle with a width of ten and height of five
      */
-    public Obstacle(double x){
-        this(10, 40, Color.PURPLE, x, -1, 1, 100);
+    public Obstacle() {
+        this(10, 40, Color.PURPLE, -1, 1, 100);
+
     }
+
     /**
      * Creates an obstacle with a custom width and height (in pixels)
      *
@@ -34,8 +36,12 @@ public class Obstacle extends Mob {
         setHeight(height);
     }
 
-    public Obstacle(double width, double height, Color color, double x, int damage, int destroyable, int offPoints) {
-        this(width, height);
+    public Obstacle(double width, double height, Color color, int damage, int destroyable, int offPoints) {
+        setColor(color);
+        setDamage(damage);
+        setWidth(width);
+        setHeight(height);
+        setOffPoints(offPoints);
     }
 
     /**

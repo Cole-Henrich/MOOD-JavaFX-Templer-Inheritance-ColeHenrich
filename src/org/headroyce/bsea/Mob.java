@@ -10,23 +10,33 @@ public class Mob {
     private double damage;
     // [0] - lower bound
     // [1] - upper bound
-    private final double[] boundX;
+    private double[] boundX = new double[2];
     private double width, height;
 
     public double x, y;         // Center point of the circle
     public double velX, velY;
-    private final double[] boundY;
+    private double[] boundY = new double[2];
     private double offPoints;
+    private int destroyable;
 
     public Mob() {
-        this(-1, 100);
+        this(-1, 100, 1);
     }
 
     public Mob(int damage, int offPoints) {
         setColor(Color.BLACK);
         boundX = new double[2];
         boundY = new double[2];
+        setDamage(damage);
+        setOffPoints(offPoints);
     }
+
+    public Mob(int damage, int offPoints, int destroyable) {
+        setDamage(damage);
+        setOffPoints(offPoints);
+        setDestroyable(destroyable);
+    }
+
 
     public boolean setDamage(int damage, int min, int max) {
         boolean rtn = false;
@@ -62,15 +72,16 @@ public class Mob {
      * @return true if bounds have changed, false if lower > upper
      */
     public boolean setVelocityBoundX(double lower, double upper) {
-        if( lower > upper ) {
-            return false;
+        boolean rtn = true;
+        if ((lower > upper)) {
+            rtn = false;
         }
-        boundX[0] = lower;
-        boundX[1] = upper;
-        return true;
+        if (rtn) {
+            boundX[0] = lower;
+            boundX[1] = upper;
+        }
+        return rtn;
     }
-
-
     /**
      * Changes the velocity bounds in the y direction
      * @param lower the lower limit
@@ -78,18 +89,22 @@ public class Mob {
      * @return true if bounds have changed, false if lower > upper
      */
     public boolean setVelocityBoundY( double lower, double upper ) {
-        if( lower > upper ) {
-            return false;
+        boolean rtn = true;
+        if (lower > upper) {
+            rtn = false;
         }
-        boundY[0] = lower;
-        boundY[1] = upper;
-        return true;
+        if (rtn) {
+            boundY[0] = lower;
+            boundY[1] = upper;
+        }
+        return rtn;
     }
 
 
     /**
      * Get the bounds on the velocity in the X direction
-     * @return a new array populated with the bounds of the ball in the x direction
+     *
+     * @return a new array populated with the bounds of the Mob in the x direction
      */
     public double[] getVelocityBoundX() {
         double[] rtn = new double[2];
@@ -98,9 +113,11 @@ public class Mob {
         rtn[1] = boundX[1];
         return rtn;
     }
+
     /**
      * Get the bounds on the velocity in the Y direction
-     * @return a new array populated with the bounds of the ball in the y direction
+     *
+     * @return a new array populated with the bounds of the Mob in the y direction
      */
     public double[] getVelocityBoundY() {
         double[] rtn = new double[2];
@@ -109,13 +126,29 @@ public class Mob {
         rtn[1] = boundY[1];
         return rtn;
     }
+
     /**
-     * Sets the color of the ball
-     * @param c the new color of the ball (cannot be null)
+     * Sets the destructibility of the object.
+     *
+     * @param destroyable the new destroyable value.
+     * @return true if the destroyable is 1 or 0; false otherwise.
+     */
+    public boolean setDestroyable(int destroyable) {
+        if (destroyable == 1 || destroyable == 0) {
+            this.destroyable = destroyable;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get the destructibility of the Mob
+     *
+     * @param c the new color of the Mob (cannot be null)
      * @return true if the color has changed, false otherwise
      */
-    public boolean setColor( Color c ){
-        if( c == null ){
+    public boolean setColor(Color c) {
+        if (c == null) {
             return false;
         }
 
@@ -125,10 +158,11 @@ public class Mob {
     }
 
     /**
-     * Get the current color of the ball
-     * @return the current color of the ball
+     * Get the current color of the Mob
+     *
+     * @return the current color of the Mob
      */
-    public Color getColor(){
+    public Color getColor() {
         return this.color;
     }
 
@@ -136,28 +170,47 @@ public class Mob {
      * Get the current hit point value of the ball
      * @return a non-negative value representing the hit points of the ball
      */
-    public double getHP(){ return hp; }
+    public double getHP(){ return hp;
+    }
 
     /**
      * Add to the current hit points of the ball.  Hit points cannot go below zero.
+     *
      * @param deltaHP the value to add (or subtract) from the hitpoints of the ball
      */
-    public void addHP( double deltaHP ){
+    public void addHP(double deltaHP) {
         hp += deltaHP;
-        if( hp < 0 ){
+        if (hp < 0) {
             hp = 0;
         }
     }
 
     /**
-     * Set the width of this object.  An obstacles's width must be positive.
+     * Set the offPoints of this object.
+     *
+     * @param offPoints the proposed offPoints
+     * @return true if the offPoints are set, false if not.
+     */
+    public boolean setOffPoints(double offPoints) {
+        boolean rtn = false;
+
+        if (offPoints > 0) {
+            this.offPoints = offPoints;
+            rtn = true;
+        }
+        return rtn;
+    }
+
+    /**
+     * Set the width of this object.  An obstacle's width must be positive.
+     *
      * @param w the new, positive, width of this object
      * @return true if the width is set, false if width is not changed
      */
-    public boolean setWidth(double w){
+    public boolean setWidth(double w) {
         boolean rtn = false;
 
-        if( w > 0 ) {
+        if (w > 0) {
             this.width = w;
             rtn = true;
         }
@@ -166,14 +219,15 @@ public class Mob {
     }
 
     /**
-     * Set the height of this object.  An obstacles's height must be positive.
+     * Set the height of this object.  An obstacle's height must be positive.
+     *
      * @param h the new, positive, height of this object
      * @return true if the height is set, false if height is not changed
      */
-    public boolean setHeight(double h){
+    public boolean setHeight(double h) {
         boolean rtn = false;
 
-        if( h > 0 ) {
+        if (h > 0) {
             this.height = h;
             rtn = true;
         }

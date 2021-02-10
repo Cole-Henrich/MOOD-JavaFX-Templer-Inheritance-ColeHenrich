@@ -20,11 +20,9 @@ public class Lantern extends Ball {
         }
         return rtn;
     }
-
     public boolean isSpawnColor(Color color) {
         return (checkColors(color, pinkHexes));
     }
-
     public boolean isHealthColor(Color color) {
         return checkColors(color, greenHexes);
     }
