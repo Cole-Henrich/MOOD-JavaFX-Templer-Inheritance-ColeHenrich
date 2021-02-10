@@ -42,7 +42,7 @@ public class GameLogic {
     private final ArrayList<Mob> enemies;
 
     private static final int PLAYER_SCORING_TIME = 1000;
-    private static final int PLAYER_SCORING_POINTS = 0;
+    private static final int PLAYER_SCORING_POINTS = 10;
     private int PLAYER_SCORING_TIMER = 1000;
     public int playerScore = 0;
 
@@ -321,7 +321,6 @@ public class GameLogic {
                             enemy.velY = changeY * Math.abs(enemy.velY);
                         }
                     }
-
                     enemy.move();
                 }
                 // CHECK WALLS ON EVERYTHING
@@ -363,7 +362,6 @@ public class GameLogic {
                     }
                     playerCollided =  enemyRemove || playerCollided;
                 }
-
                 if( playerCollided ){
                     // Stops lives being lost if green
                     if( flashTimer <= 0 ){
