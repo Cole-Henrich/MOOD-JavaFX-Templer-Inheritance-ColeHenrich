@@ -8,6 +8,7 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -15,21 +16,14 @@ import java.util.Random;
  */
 public class GameLogic {
 
-    public enum DIRECTION {
-        LEFT,
-        UP,
-        RIGHT,
-        DOWN,
-        STOP,
-        NONE,
-
-    }
+    private boolean displayYouLose;
 
     // The game step in milliseconds
     public static final int GAME_STEP_TIMER = 17;
     private final GameTimer gameTimer;
 
     private boolean gameOver;
+    private int playerScore = 0;
 
     private final Random rand;
 
@@ -44,7 +38,11 @@ public class GameLogic {
     private static final int PLAYER_SCORING_TIME = 1000;
     private static final int PLAYER_SCORING_POINTS = 10;
     private int PLAYER_SCORING_TIMER = 1000;
-    public int playerScore = 0;
+    private int secondsAlive = 0;
+
+    public int getPlayerScore() {
+        return playerScore;
+    }
 
     private static final int ENEMY_SPAWN_TIME = 150;
     private static final int ENEMY_DIRECTION_PROBABILITY = 5;
@@ -98,30 +96,21 @@ public class GameLogic {
         Text lives = new Text("Lives: " + Math.round(player.getHP()));
 
         gc.strokeText("Score: " + playerScore, 10, 30);
-        gc.strokeText(lives.getText(),width - 10 - lives.getLayoutBounds().getWidth(), 20);
+        gc.strokeText(lives.getText(), width - 10 - lives.getLayoutBounds().getWidth(), 20);
     }
 
-    /**
-     * Pause or unpause the game
-     * @param setPaused true to pause, false otherwise
-     */
-    public void pause(boolean setPaused ){
-        if( setPaused ){
-            gameTimer.stop();
-        }
-        else {
-            gameTimer.start();
-        }
+    public int getSecondsAlive() {
+        return secondsAlive;
     }
 
-    public void reset(){
+    public void reset() {
         player.x = 200;
         player.y = 400;
         player.setRadius(10);
 
         player.velX = player.velY = 0;
         player.setVelocityBoundX(-7, 7);
-        player.setVelocityBoundY(-7,7);
+        player.setVelocityBoundY(-7, 7);
 
 
         player.addHP(3);
@@ -129,22 +118,49 @@ public class GameLogic {
         forcesOnPlayer.clear();
 
         gameOver = false;
+        displayYouLose = false;
         playerScore = 0;
 
-        enemies.clear();
     }
 
-    public boolean isGameOver(){
+    /**
+     * Pause or unpause the game
+     *
+     * @param setPaused true to pause, false otherwise
+     */
+    public void pause(boolean setPaused) {
+        if (setPaused) {
+            gameTimer.stop();
+        } else {
+            gameTimer.start();
+        }
+    }
+
+    public boolean isDisplayYouLose() {
+        return displayYouLose;
+    }
+
+    public boolean isGameOver() {
         return gameOver;
     }
 
-    private boolean collideWalls(Mob player){
+    public enum DIRECTION {
+        LEFT,
+        UP,
+        RIGHT,
+        DOWN,
+        STOP,
+
+
+    }
+
+    private boolean collideWalls(Mob player) {
 
         boolean collided = false;
 
         // Keep player with the window
 
-        if( player == this.player ) {
+        if (player == this.player) {
             if (player.y + player.getHeight() > height) {
                 player.y = height - player.getHeight();
                 player.bounceY();
@@ -214,7 +230,7 @@ public class GameLogic {
 
             // Covert the time_elapsed from nanoseconds to milliseconds
             long time_elapsed = (now - lastUpdate)/1000000;
-
+            System.err.println(time_elapsed);
             flashTimer -= time_elapsed;
             if( flashTimer < 0){
                 player.setColor(Color.BLACK);
@@ -224,6 +240,7 @@ public class GameLogic {
             if( PLAYER_SCORING_TIMER < 0 ){
                 PLAYER_SCORING_TIMER = PLAYER_SCORING_TIME;
                 playerScore += PLAYER_SCORING_POINTS;
+                secondsAlive++;
             }
 
             ENEMY_SPAWN_TIMER -= time_elapsed;
@@ -275,7 +292,7 @@ public class GameLogic {
                             if (enemy != null) {
                                 System.out.println(" new obstacle: " + enemy.getClass() + "  " + enemy.x);
                             }
-                            enemy.y = -1 * enemy.getHeight();  // off screen
+                            Objects.requireNonNull(enemy).y = -1 * enemy.getHeight();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
                             enemy.setVelocityBoundY(0, 10);
                             enemy.velY = 5;
@@ -341,7 +358,6 @@ public class GameLogic {
                 }
 
                 // CHECK BALL COLLISIONS ON EVERYTHING
-                double hpDamage = 0;
                 for( int i = 0; i < enemies.size(); i++ ) {
                     Mob enemy = enemies.get(i);
                     for( int j = i + 1; j < enemies.size(); j++ ) {
@@ -355,6 +371,7 @@ public class GameLogic {
                     if( enemyRemove ) {
                         playerScore -= 100;
                         player.addHP(enemy.getDamage());
+                        System.out.println("enemy.getDamage() " + enemy.getDamage() + "   enemy.getClass()  " + enemy.getClass() + "   enemy.getColor() " + enemy.getColor() + "  enemy.getClass().getSuperclass() " + enemy.getClass().getSuperclass());
                         player.velX = enemy.velX;
                         player.velY = enemy.velY;
                         enemies.remove(enemy);
@@ -365,9 +382,14 @@ public class GameLogic {
                 if( playerCollided ){
                     // Stops lives being lost if green
                     if( flashTimer <= 0 ){
-                        if( player.getHP() <= 0 ) {
-                            gameOver = true;
-                            pause(true);
+                        if( player.getHP() <= 0) {
+                            long wait = 0;
+                            wait += time_elapsed;
+                            displayYouLose = true;
+                            if (wait > 10000) {
+                                gameOver = true;
+                                pause(true);
+                            }
                         }
                     }
                     flashTimer = PLAYER_FLASH_TIME;

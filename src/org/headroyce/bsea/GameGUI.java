@@ -20,6 +20,7 @@ public class GameGUI extends StackPane {
     private final AnimationTimer animTimer;
 
     private final Button reset;
+    private final Button youLose;
 
     public GameGUI() {
         gameArea = new Canvas();
@@ -30,17 +31,21 @@ public class GameGUI extends StackPane {
         logic = new GameLogic(gameArea.getWidth(), gameArea.getHeight());
 
         reset = new Button("Reset");
+        youLose = new Button("You lose! " + " You survived for " + logic.getSecondsAlive() + ", and your total score was " + logic.getPlayerScore() + ". Thanks for playing!");
+
         reset.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 reset.setVisible(false);
+                youLose.setVisible(false);
                 logic.reset();
                 logic.pause(false);
             }
         });
         reset.setVisible(false);
-
+        youLose.setVisible(false);
         this.getChildren().add(reset);
+        this.getChildren().add(youLose);
         this.getChildren().add(gameArea);
     }
 
@@ -128,19 +133,18 @@ public class GameGUI extends StackPane {
             GraphicsContext gc = gameArea.getGraphicsContext2D();
 
 
-            gc.clearRect(0,0, gameArea.getWidth(), gameArea.getHeight());
-
-            if(logic.isGameOver()){
+            gc.clearRect(0, 0, gameArea.getWidth(), gameArea.getHeight());
+            if (logic.isDisplayYouLose()) {
+                youLose.setVisible(true);
+                youLose.toFront();
+            }
+            if (logic.isGameOver()) {
                 reset.setVisible(true);
                 reset.toFront();
-            }
-            else {
+            } else {
                 logic.render(gameArea);
             }
 
         }
     }
-
-
-
 }
