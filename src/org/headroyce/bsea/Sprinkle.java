@@ -5,6 +5,6 @@ public class Sprinkle extends Ball {
         super(5, 10, 0);
         this.x = 100;
         this.y = 100;
-        setColor(getRandomColor_MoreEfficiently());
+        setColor(getRandomColor());
     }
 }

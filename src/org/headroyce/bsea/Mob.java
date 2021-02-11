@@ -5,6 +5,14 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 
 public class Mob {
+    char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+    public Mob(int damage, int offPoints, int destroyable) {
+        setDamage(damage);
+        setOffPoints(offPoints);
+        setDestroyable(destroyable);
+    }
+
     private Color color;
     private double hp;
     private double damage;
@@ -31,10 +39,14 @@ public class Mob {
         setOffPoints(offPoints);
     }
 
-    public Mob(int damage, int offPoints, int destroyable) {
-        setDamage(damage);
-        setOffPoints(offPoints);
-        setDestroyable(destroyable);
+    /*
+    Some green colors are
+                          00FFC0 ---> 00FF00
+                          00FF00 ---> A0FF00
+
+     */
+    private void makeGreen() {
+
     }
 
 
@@ -323,18 +335,7 @@ public class Mob {
     public void render(Canvas canvas) {
     }
 
-    Color getRandomColor_MoreEfficiently() {
-        return Color.web(getRandomHex_MoreEfficiently());
-    }
-
-    private String getRandomHex_MoreEfficiently() {
-        char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-        StringBuilder hexcode = new StringBuilder();
-        hexcode.append("#");
-        for (int i = 0; i < 6; i++) {
-            int random = (int) (Math.random() * hexadecimal.length);
-            hexcode.append(hexadecimal[random]);
-        }
-        return String.valueOf(hexcode);
+    public Color getRandomColor() {
+        return new Color(Math.random(), Math.random(), Math.random(), Math.random());
     }
 }

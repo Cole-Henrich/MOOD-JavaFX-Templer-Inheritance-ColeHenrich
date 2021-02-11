@@ -382,7 +382,7 @@ public class GameLogic {
                         }
                     }
                     flashTimer = PLAYER_FLASH_TIME;
-                    player.setColor(player.getRandomColor_MoreEfficiently());
+                    player.setColor(player.getRandomColor());
                 }
 
                 lastUpdate = now;

@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 public class Lantern extends Ball {
     public Lantern() {
         super(30, -1, 100);
-        setColor(getRandomColor_MoreEfficiently());
+        setColor(getRandomColor());
     }
 
     String[] pinkHexes = {"#FFC0CB", "#FFB6C1", "#FF69B4", "#FF1493", "#DB7093", "#C71585", "#E6E6FA", "#D8BFD8", "#DDA0DD", "#DA70D6", "#EE82EE", "#FF00FF", "#FF00FF", "#BA55D3", "#9932CC", "#9400D3", "#8A2BE2", "#8B008B", "#800080", "#6A0DAD", "#9370DB", "#7B68EE", "#6A5ACD", "#483D8B", "#663399", "#4B0082"};

@@ -45,6 +45,8 @@ public class Ball extends Mob{
         if (radius <= 0) {
             radius = 1;
         }
+        setDamage(damage);
+        setOffPoints(offPoints);
         this.radius = radius;
     }
 
@@ -91,7 +93,8 @@ public class Ball extends Mob{
     }
 
     /**
-     * Set the height of this object.  An obstacles's height must be positive.
+     * Set the height of this object.  An ball's height must be positive.
+     *
      * @param h the new, positive, height of this object
      * @return true if the height is set, false if height is not changed
      */
@@ -134,9 +137,14 @@ public class Ball extends Mob{
         return (distance < rad);
     }
 
-    public void render( Canvas canvas ){
+    public void render(Canvas canvas) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(this.getColor());
-        gc.fillOval(x,y, 2*radius, 2*radius);
+        gc.fillOval(x, y, 2 * radius, 2 * radius);
     }
+//    public void IS(){
+//        // rgb 0-199, 0-199, 0 = greenRange
+//        Color green = Color.GREEN;
+//        green.deriveColor()
+//    }
 }
