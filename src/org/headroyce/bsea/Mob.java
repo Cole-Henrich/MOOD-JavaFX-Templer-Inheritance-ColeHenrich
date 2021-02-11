@@ -49,7 +49,7 @@ public class Mob {
 
     public boolean setDamage(int damage) {
         boolean rtn = false;
-        if (setDamage(damage, -1, 1)) {
+        if (setDamage(damage, -10, 10)) {
             this.damage = damage;
             rtn = true;
         }

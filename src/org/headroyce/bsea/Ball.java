@@ -33,6 +33,8 @@ public class Ball extends Mob{
 
     public Ball(double radius, Color COLOR, int damage, int offPoints) {
         setColor(COLOR);
+        setDamage(damage);
+        setOffPoints(offPoints);
         if (radius <= 0) {
             radius = 1;
         }
@@ -71,7 +73,8 @@ public class Ball extends Mob{
     }
 
     /**
-     * Set the width of this object.  An obstacles's width must be positive.
+     * Set the width of this object.  A ball's width must be positive.
+     *
      * @param w the new, positive, width of this object
      * @return true if the width is set, false if width is not changed
      */
