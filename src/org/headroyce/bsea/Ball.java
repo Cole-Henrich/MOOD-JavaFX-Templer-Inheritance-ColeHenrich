@@ -142,9 +142,4 @@ public class Ball extends Mob{
         gc.setFill(this.getColor());
         gc.fillOval(x, y, 2 * radius, 2 * radius);
     }
-//    public void IS(){
-//        // rgb 0-199, 0-199, 0 = greenRange
-//        Color green = Color.GREEN;
-//        green.deriveColor()
-//    }
 }

@@ -338,4 +338,16 @@ public class Mob {
     public Color getRandomColor() {
         return new Color(Math.random(), Math.random(), Math.random(), Math.random());
     }
+
+    public boolean isGreen(Color color) {
+        double threshold = 0.64 * color.getGreen();
+        System.out.println("GREEN!");
+        return ((color.getBlue() < threshold) && (color.getRed() < threshold));
+    }
+
+    public boolean isRed(Color color) {
+        double threshold = 0.64 * color.getRed();
+        System.out.println("RED!");
+        return ((color.getBlue() < threshold) && (color.getGreen() < threshold));
+    }
 }

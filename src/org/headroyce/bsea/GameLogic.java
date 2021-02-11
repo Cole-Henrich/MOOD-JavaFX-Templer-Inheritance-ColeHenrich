@@ -36,7 +36,7 @@ public class GameLogic {
     private final ArrayList<Mob> enemies;
 
     private static final int PLAYER_SCORING_TIME = 1000;
-    private static final int PLAYER_SCORING_POINTS = 10;
+    private static final int PLAYER_SCORING_POINTS = 0; //10;
     private int PLAYER_SCORING_TIMER = 1000;
     private int secondsAlive = 0;
 
@@ -44,11 +44,11 @@ public class GameLogic {
         return playerScore;
     }
 
-    private static final int ENEMY_SPAWN_TIME = 150;
+    private static final int ENEMY_SPAWN_TIME = 4000; //150;
     private static final int ENEMY_DIRECTION_PROBABILITY = 5;
-    private static final int ENEMY_SPAWN_PROBABILITY = 5;
-    private static final int OBSTACLE_SPAWN_PROBABILITY = 10;
-    private int ENEMY_SPAWN_TIMER = 150;
+    private static final int ENEMY_SPAWN_PROBABILITY = 98; //5;
+    private static final int OBSTACLE_SPAWN_PROBABILITY = 99;//10;
+    private int ENEMY_SPAWN_TIMER = 4000; //150;
     private int flashTimer = 0;
 
     // Width and height of the canvas
@@ -113,7 +113,7 @@ public class GameLogic {
         player.setVelocityBoundY(-7, 7);
 
 
-        player.addHP(3);
+        player.addHP(30000);
         enemies.clear();
         forcesOnPlayer.clear();
 
@@ -217,7 +217,6 @@ public class GameLogic {
 
             // Covert the time_elapsed from nanoseconds to milliseconds
             long time_elapsed = (now - lastUpdate)/1000000;
-            System.err.println(time_elapsed);
             flashTimer -= time_elapsed;
             if( flashTimer < 0){
                 player.setColor(Color.BLACK);
@@ -240,21 +239,21 @@ public class GameLogic {
                         LifeGiver lifeGiver = new LifeGiver();
                         Ball unAmigo = new Ball(-1);
                         Lantern lantern = new Lantern();
-                        if (lantern.isSpawnColor(lantern.getColor())) {
+                        lantern.setColor(lantern.getRandomColor());
+                        if (lantern.isRed(lantern.getColor())) {
                             lantern.setRadius(40);
                             lantern.setDamage(-2);
                             lantern.x = 300;
                             lantern.y = 300;
                             for (int i = 0; i < 100; i++) {
-
                                 Sprinkle sprinkle = new Sprinkle();
                                 either.add(sprinkle);
-
-                                for (int j = 0; j < 1000; j++) {
-
+                            }
+                            if (lantern.isGreen(lantern.getColor())) {
+                                for (int i = 0; i < 100; i++) {
+                                    LifeGiver lg = new LifeGiver();
+                                    either.add(lg);
                                 }
-
-
                             }
                         }
                         either.add(lifeGiver);
@@ -279,7 +278,7 @@ public class GameLogic {
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
                             if (enemy != null) {
-                                System.out.println(" new obstacle: " + enemy.getClass() + "  enemy.x " + enemy.x + "  enemy.y " + enemy.y);
+                                // System.out.println(" new obstacle: " + enemy.getClass() + "  enemy.x " + enemy.x + "  enemy.y " + enemy.y);
                             }
                             Objects.requireNonNull(enemy).y = -1 * enemy.getHeight();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
@@ -360,7 +359,7 @@ public class GameLogic {
                     if( enemyRemove ) {
                         playerScore -= 100;
                         player.addHP(enemy.getDamage());
-                        System.out.println("enemy.getDamage() " + enemy.getDamage() + "   enemy.getClass()  " + enemy.getClass() + "   enemy.getColor() " + enemy.getColor() + "  enemy.getClass().getSuperclass() " + enemy.getClass().getSuperclass());
+                        // System.out.println("enemy.getDamage() " + enemy.getDamage() + "   enemy.getClass()  " + enemy.getClass() + "   enemy.getColor() " + enemy.getColor() + "  enemy.getClass().getSuperclass() " + enemy.getClass().getSuperclass());
                         player.velX = enemy.velX;
                         player.velY = enemy.velY;
                         enemies.remove(enemy);
