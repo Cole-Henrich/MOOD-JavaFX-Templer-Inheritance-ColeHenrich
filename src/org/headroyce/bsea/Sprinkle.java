@@ -1,11 +1,10 @@
 package org.headroyce.bsea;
 
-import javafx.scene.paint.Color;
-
 public class Sprinkle extends Ball {
-    public Sprinkle(Color color) {
-        super(5, color, 10, 0);
+    public Sprinkle() {
+        super(5, 10, 0);
         this.x = 100;
         this.y = 100;
+        setColor(getRandomColor_MoreEfficiently());
     }
 }

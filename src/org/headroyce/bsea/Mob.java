@@ -311,14 +311,30 @@ public class Mob {
         if( this.x + this.getWidth() < other.x ){
             return false;
         }
-        if( this.x > other.x + other.getWidth()){
+        if (this.x > other.x + other.getWidth()) {
             return false;
         }
-        if( this.y + this.getHeight() < other.y ){
+        if (this.y + this.getHeight() < other.y) {
             return false;
         }
         return !(this.y > other.y + other.getHeight());
     }
 
-    public void render( Canvas canvas ){ }
+    public void render(Canvas canvas) {
+    }
+
+    Color getRandomColor_MoreEfficiently() {
+        return Color.web(getRandomHex_MoreEfficiently());
+    }
+
+    private String getRandomHex_MoreEfficiently() {
+        char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        StringBuilder hexcode = new StringBuilder();
+        hexcode.append("#");
+        for (int i = 0; i < 6; i++) {
+            int random = (int) (Math.random() * hexadecimal.length);
+            hexcode.append(hexadecimal[random]);
+        }
+        return String.valueOf(hexcode);
+    }
 }
