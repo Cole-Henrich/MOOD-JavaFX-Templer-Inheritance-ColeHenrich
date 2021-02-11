@@ -261,11 +261,9 @@ public class GameLogic {
                             lantern.setDamage(-2);
                             lantern.x = 300;
                             lantern.y = 300;
-                            for (int i = 0; i < 30; i++) {
-                                Ball sprinkles = new Ball(5, getRandomColor_MoreEfficiently(), -1, 200);
-                                sprinkles.x = 100;
-                                sprinkles.y = 100;
-                                either.add(sprinkles);
+                            for (int i = 0; i < 100; i++) {
+                                Sprinkle sprinkle = new Sprinkle(getRandomColor_MoreEfficiently());
+                                either.add(sprinkle);
                             }
                         }
                         either.add(lifeGiver);
@@ -290,7 +288,7 @@ public class GameLogic {
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
                             if (enemy != null) {
-                                System.out.println(" new obstacle: " + enemy.getClass() + "  " + enemy.x);
+                                System.out.println(" new obstacle: " + enemy.getClass() + "  enemy.x " + enemy.x + "  enemy.y " + enemy.y);
                             }
                             Objects.requireNonNull(enemy).y = -1 * enemy.getHeight();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
