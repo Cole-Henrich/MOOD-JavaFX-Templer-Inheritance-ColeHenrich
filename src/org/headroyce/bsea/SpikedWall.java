@@ -8,15 +8,6 @@ import javafx.scene.paint.Color;
  * Width must be randomly chosen between 5px and 40% of the screen.
  */
 public class SpikedWall extends Obstacle {
-    public SpikedWall(double canvasWidth) {
-        double width = (Math.random() * ((canvasWidth * 0.4) - 5) + 5); //thank you rosses
-        int spikeX = 1;
-        if (Math.random() >= 0.5) {
-            spikeX = (int) canvasWidth;
-        }
-        this(canvas)
-
-    }
 
     /**
      * Creates an SpikedWall with a random x and width between 5 pixels and 40% of the screen,
@@ -24,7 +15,7 @@ public class SpikedWall extends Obstacle {
      * meaning the player gets 100 points when the SpikedWall leaves the screen .
      */
 
-    public SpikedWall(double canvasWidth, int spikeX, double width) {
-        super(spikeX, width, 200, Color.AQUA, -1, false, 100);
+    public SpikedWall(int x, double canvasWidth) {
+        super(x, (Math.random() * ((canvasWidth * 0.4) - 5) + 5)/*thank you rosses*/, 200, Color.AQUA, -1, false, 100);
     }
 }

@@ -372,11 +372,11 @@ public class GameLogic {
                             enemies.add(enemy);
                         }
                     } else {
-                        double spikeX = 1;
+                        int spikeX = 1;
                         if (Math.random() > 0.5) {
-                            spikeX = width;
+                            spikeX = (int) width;
                         }
-                        SpikedWall spikedWall = new SpikedWall(width);
+                        SpikedWall spikedWall = new SpikedWall(spikeX, width);
                         spikedWall.setVelocityBoundX(0, 0);
                         Obstacle obstacle = new Obstacle(width);
                         Obstacle[] rectangles = {spikedWall, obstacle};

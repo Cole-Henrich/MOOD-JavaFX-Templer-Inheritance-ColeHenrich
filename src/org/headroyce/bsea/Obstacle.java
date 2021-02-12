@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 public class Obstacle extends Mob {
    public GameLogic logic = new GameLogic(getWidth(), getHeight());
     /**
-     * Creates a destroyable PURPLE obstacle with a width of ten and height of 40, a damage of -1, and 100 offPoints.
+     * Creates a destroyable PURPLE obstacle with a random x coordinate, a width of ten and height of 40, a damage of -1, and 100 offPoints.
      */
     public Obstacle(double canvasWidth) {
         this((int) (Math.random() * canvasWidth), 10, 40, Color.PURPLE, -1, true, 100);
