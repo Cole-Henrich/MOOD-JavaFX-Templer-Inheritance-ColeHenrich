@@ -35,7 +35,7 @@ public class GameLogic {
     private final ArrayList<Mob> enemies;
 
     private static final int PLAYER_SCORING_TIME = 1000;
-    private static final int PLAYER_SCORING_POINTS = 0; //10;
+    private static final int PLAYER_SCORING_POINTS = 10; //10;
     private int PLAYER_SCORING_TIMER = 1000;
     private int secondsAlive = 0;
 
@@ -43,11 +43,11 @@ public class GameLogic {
         return playerScore;
     }
 
-    private static final int ENEMY_SPAWN_TIME = 4000; //150;
+    private static final int ENEMY_SPAWN_TIME = 150;
     private static final int ENEMY_DIRECTION_PROBABILITY = 5;
-    private static final int ENEMY_SPAWN_PROBABILITY = 40; //5;
-    private static final int OBSTACLE_SPAWN_PROBABILITY = 99;//10;
-    private int ENEMY_SPAWN_TIMER = 4000; //150;
+    private static final int ENEMY_SPAWN_PROBABILITY = 5;
+    private static final int OBSTACLE_SPAWN_PROBABILITY = 10;
+    private int ENEMY_SPAWN_TIMER = 150;
     private int flashTimer = 0;
 
     // Width and height of the canvas
@@ -272,7 +272,7 @@ public class GameLogic {
                         if (Math.random() > 0.5) {
                             spikeX = width;
                         }
-                        SpikedWall spikedWall = new SpikedWall(spikeX, 30);//Math.random() * ((width * 0.4) - 5) + 5); //thank you rosses
+                        SpikedWall spikedWall = new SpikedWall(spikeX, Math.random() * ((width * 0.4) - 5) + 5); //thank you rosses
                         Obstacle obstacle = new Obstacle();
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
