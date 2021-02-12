@@ -46,7 +46,7 @@ public class GameLogic {
     private static final int ENEMY_SPAWN_TIME = 150;
     private static final int ENEMY_DIRECTION_PROBABILITY = 5;
     private static final int ENEMY_SPAWN_PROBABILITY = 5;
-    private static final int OBSTACLE_SPAWN_PROBABILITY = 10;
+    private static final int OBSTACLE_SPAWN_PROBABILITY = 15;
     private int ENEMY_SPAWN_TIMER = 150;
     private int flashTimer = 0;
 
@@ -268,7 +268,7 @@ public class GameLogic {
                             enemies.add(enemy);
                         }
                     } else {
-                        double spikeX = 1;
+                        double spikeX = 2;
                         if (Math.random() > 0.5) {
                             spikeX = width;
                         }
@@ -358,11 +358,14 @@ public class GameLogic {
                     if( enemyRemove ) {
                         playerScore -= 100;
                         player.addHP(enemy.getDamage());
+                        System.out.println("enemy.isDestroyable() " + enemy.isDestroyable());
                         // System.out.println("enemy.getDamage() " + enemy.getDamage() + "   enemy.getClass()  " + enemy.getClass() + "   enemy.getColor() " + enemy.getColor() + "  enemy.getClass().getSuperclass() " + enemy.getClass().getSuperclass());
                         player.velX = enemy.velX;
                         player.velY = enemy.velY;
-                        enemies.remove(enemy);
-                        i--;
+                        if (enemy.isDestroyable()) {
+                            enemies.remove(enemy);
+                            i--;
+                        }
                     }
                     playerCollided =  enemyRemove || playerCollided;
                 }

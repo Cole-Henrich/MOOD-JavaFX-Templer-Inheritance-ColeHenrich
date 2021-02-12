@@ -154,7 +154,15 @@ public class Mob {
     }
 
     /**
-     * Get the destructibility of the Mob
+     * Get the destructibility of the Mob,
+     * Whether it disappears on collision or not.
+     */
+    public boolean isDestroyable() {
+        return this.destroyable == 1;
+    }
+
+    /**
+     * Get the color of the Mob
      *
      * @param c the new color of the Mob (cannot be null)
      * @return true if the color has changed, false otherwise
