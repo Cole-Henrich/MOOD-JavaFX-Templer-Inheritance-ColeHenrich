@@ -37,7 +37,7 @@ public class GameLogic {
     private static final int PLAYER_SCORING_TIME = 1000;
     private static final int PLAYER_SCORING_POINTS = 10; //10;
     private int PLAYER_SCORING_TIMER = 1000;
-    private final double WIDTH = 0;
+
     private int secondsAlive = 0;
 
 
@@ -48,7 +48,7 @@ public class GameLogic {
     private static final int ENEMY_SPAWN_TIME = 150;
     private static final int ENEMY_DIRECTION_PROBABILITY = 5;
     private static final int ENEMY_SPAWN_PROBABILITY = 5;
-    private static final int OBSTACLE_SPAWN_PROBABILITY = 15;
+    private static final int OBSTACLE_SPAWN_PROBABILITY = 10;
     private int ENEMY_SPAWN_TIMER = 150;
     private int flashTimer = 0;
 
@@ -106,6 +106,10 @@ public class GameLogic {
         return secondsAlive;
     }
 
+    public void setSecondsAlive(int secsAlive) {
+        secondsAlive = secsAlive;
+    }
+
     public void reset() {
         player.x = 200;
         player.y = 400;
@@ -116,7 +120,7 @@ public class GameLogic {
         player.setVelocityBoundY(-7, 7);
 
 
-        player.addHP(30000);
+        player.addHP(3);
         enemies.clear();
         forcesOnPlayer.clear();
 
@@ -277,6 +281,7 @@ public class GameLogic {
                             spikeX = width;
                         }
                         SpikedWall spikedWall = new SpikedWall(spikeX, Math.random() * ((width * 0.4) - 5) + 5); //thank you rosses
+                        spikedWall.setVelocityBoundX(0, 0);
                         Obstacle obstacle = new Obstacle();
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
@@ -374,9 +379,16 @@ public class GameLogic {
                         playerScore -= 100;
                         player.addHP(enemy.getDamage());
                         System.out.println("enemy.isDestroyable() " + enemy.isDestroyable());
-                        // System.out.println("enemy.getDamage() " + enemy.getDamage() + "   enemy.getClass()  " + enemy.getClass() + "   enemy.getColor() " + enemy.getColor() + "  enemy.getClass().getSuperclass() " + enemy.getClass().getSuperclass());
+                        System.out.println("enemy.getDamage() " + enemy.getDamage() + "   enemy.getClass()  " + enemy.getClass() + "   enemy.getColor() " + enemy.getColor() + "  enemy.getClass().getSuperclass() " + enemy.getClass().getSuperclass());
+                        double veloX = player.velX;
+                        double veloY = player.velY;
                         player.velX = enemy.velX;
                         player.velY = enemy.velY;
+                        if ((veloX < enemy.getVelocityBoundX()[1]) && (veloY < enemy.getVelocityBoundY()[1])) {
+//                            enemy.velX = veloX;
+//                            enemy.velY = veloY;
+                        }
+
                         if (enemy.isDestroyable()) {
                             enemies.remove(enemy);
                             i--;
@@ -390,13 +402,13 @@ public class GameLogic {
                     // Stops lives being lost if green
                     if( flashTimer <= 0 ){
                         if( player.getHP() <= 0) {
-                            long wait = 0;
-                            wait += time_elapsed;
                             displayYouLose = true;
-                            if (wait > 10000) {
-                                gameOver = true;
-                                pause(true);
-                            }
+                            // gameOver = true;
+                            pause(true);
+                            System.out.println("playerScore + secondsAlive " + playerScore + " " + secondsAlive);
+                            System.out.println("getplayerScore() + getSecondsAlive() " + getPlayerScore() + " " + getSecondsAlive());
+
+
                         }
                     }
                     flashTimer = PLAYER_FLASH_TIME;

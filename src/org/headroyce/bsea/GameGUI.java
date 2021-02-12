@@ -31,8 +31,7 @@ public class GameGUI extends StackPane {
         logic = new GameLogic(gameArea.getWidth(), gameArea.getHeight());
 
         reset = new Button("Reset");
-        youLose = new Button("You lose! " + " You survived for " + logic.getSecondsAlive() + ", and your total score was " + logic.getPlayerScore() + ". Thanks for playing!");
-
+        youLose = new Button();
         reset.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -131,14 +130,16 @@ public class GameGUI extends StackPane {
         @Override
         public void handle(long now) {
             GraphicsContext gc = gameArea.getGraphicsContext2D();
-
-
             gc.clearRect(0, 0, gameArea.getWidth(), gameArea.getHeight());
             if (logic.isDisplayYouLose()) {
+                youLose.setText("You lose! " + " You survived for " + logic.getSecondsAlive() + ", and your total score was " + logic.getPlayerScore() + ". Thanks for playing!");
+                System.out.println(" logic.getPlayerScore() + \" \" + logic.getSecondsAlive() " + logic.getPlayerScore() + " " + logic.getSecondsAlive());
                 youLose.setVisible(true);
+                System.out.println(" logic.getPlayerScore() + \" \" + logic.getSecondsAlive() " + logic.getPlayerScore() + " " + logic.getSecondsAlive());
                 youLose.toFront();
-            }
-            if (logic.isGameOver()) {
+                System.out.println(" logic.getPlayerScore() + \" \" + logic.getSecondsAlive() " + logic.getPlayerScore() + " " + logic.getSecondsAlive());
+
+            } else if (logic.isGameOver()) {
                 reset.setVisible(true);
                 reset.toFront();
             } else {

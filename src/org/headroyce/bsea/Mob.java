@@ -342,7 +342,7 @@ public class Mob {
     }
 
     public void escape(Mob this, Mob chaser, double canvasWidth) {
-        if (chaser.getHeight() > this.getHeight()) {
+        if (chaser.getHeight() > this.getHeight() && chaser.y - chaser.getHeight() < this.y) {
             if (chaser.x > canvasWidth / 2) {
                 this.x = chaser.x - 30;
             } else {

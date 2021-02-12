@@ -43,6 +43,8 @@ public class Obstacle extends Mob {
         setHeight(height);
         setOffPoints(offPoints);
         setDestroyable(destroyable);
+        setVelocityBoundX(0, 0);
+        setVelocityBoundY(0, 5);
     }
 
     /**
