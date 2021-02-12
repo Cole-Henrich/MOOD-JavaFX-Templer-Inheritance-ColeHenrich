@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -57,7 +58,7 @@ public class GameLogic {
 
     public GameLogic(double width, double height) {
         rand = new Random();
-
+        System.out.println(intToWordArt(10));
         gameTimer = new GameTimer();
 
         this.width = Math.abs(width);
@@ -75,9 +76,10 @@ public class GameLogic {
 
     /**
      * Renders the game elements onto a canvas
+     *
      * @param canvas the canvas to render onto
      */
-    public void render(Canvas canvas){
+    public void render(Canvas canvas) {
 
         // Update width and height
         width = canvas.getWidth();
@@ -111,6 +113,7 @@ public class GameLogic {
     }
 
     public void reset() {
+
         player.x = 200;
         player.y = 400;
         player.setRadius(10);
@@ -182,12 +185,12 @@ public class GameLogic {
         }
 
 
-        if( player.x + player.getWidth() > width ){
+        if (player.x + player.getWidth() > width) {
             player.x = width - player.getWidth();
             player.bounceX();
             collided = true;
         }
-        if( player.x < 0 ){
+        if (player.x < 0) {
             player.x = 0;
             player.bounceX();
             collided = true;
@@ -204,8 +207,107 @@ public class GameLogic {
         forcesOnPlayer.remove(direction);
     }
 
+    private String[] getArt() {
+        return new String[]{
+                """
+                      
+                      0
+                    0   0
+                   0     0
+                    0   0
+                      0
+              
+                  """,
+                """
+                   1
+                   1
+                   1
+                   1
+                """,
+                """
+                  22
+                2   2
+                   2
+                  2
+                2222222 
+                """,
+                """
+                333
+                   3
+                333
+                   3
+                333
+                
+                """,
+                """
+                    4
+                   44
+                 4  4
+                4444444
+                   4
+                   4
+                """,
+                """
+                55555
+                55
+                5555
+                   55
+                5555
+                
+                """,
+                """
+                    6
+                   6
+                  6 66
+                  6   6
+                   66
+                """,
+                """
+                77777
+                   7
+                  7
+                 7
+                7
+                """,
+                """
+                  888
+                 8   8
+                8     8
+                 8   8
+                  888
+                 8   8
+                8     8
+                 8   8
+                  888
+                   
+                """,
+                """
+                  99
+                9    9
+                9     9
+                 99999
+                     9
+                    9
+                   9
+                  9
+                 9
+                9
+                """
+        };
+    }
 
+    private String intToWordArt(int number) {
+        String[] art = getArt();
+        System.out.println(Arrays.toString(art));
+        String num = String.valueOf(number);
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < num.length(); i++) {
+            int val = Integer.parseInt(String.valueOf(num.charAt(i)));
+            result.append(art[val]);
 
+        }
+        return result.toString();
+    }
 
     /**
      * Runs once per game tick which is set dynamically by the GAME_STEP_TIMER
@@ -223,25 +325,25 @@ public class GameLogic {
         public void handle(long now) {
 
             // Covert the time_elapsed from nanoseconds to milliseconds
-            long time_elapsed = (now - lastUpdate)/1000000;
+            long time_elapsed = (now - lastUpdate) / 1000000;
             flashTimer -= time_elapsed;
-            if( flashTimer < 0){
+            if (flashTimer < 0) {
                 player.setColor(Color.BLACK);
             }
 
             PLAYER_SCORING_TIMER -= time_elapsed;
-            if( PLAYER_SCORING_TIMER < 0 ){
+            if (PLAYER_SCORING_TIMER < 0) {
                 PLAYER_SCORING_TIMER = PLAYER_SCORING_TIME;
                 playerScore += PLAYER_SCORING_POINTS;
                 secondsAlive++;
             }
 
             ENEMY_SPAWN_TIMER -= time_elapsed;
-            if( ENEMY_SPAWN_TIMER < 0 ){
+            if (ENEMY_SPAWN_TIMER < 0) {
                 int chance = rand.nextInt(100);
-                if( chance < OBSTACLE_SPAWN_PROBABILITY ){
+                if (chance < OBSTACLE_SPAWN_PROBABILITY) {
 
-                    if( chance < ENEMY_SPAWN_PROBABILITY ) {
+                    if (chance < ENEMY_SPAWN_PROBABILITY) {
                         ArrayList<Ball> either = new ArrayList<>();
                         LifeGiver lifeGiver = new LifeGiver();
                         Ball unAmigo = new Ball(-1);
@@ -299,23 +401,23 @@ public class GameLogic {
                 ENEMY_SPAWN_TIMER = ENEMY_SPAWN_TIME;
             }
 
-            if( time_elapsed > GameLogic.GAME_STEP_TIMER) {
+            if (time_elapsed > GameLogic.GAME_STEP_TIMER) {
                 // Game steps go here
 
-                if( forcesOnPlayer.containsKey(DIRECTION.LEFT) ){
+                if (forcesOnPlayer.containsKey(DIRECTION.LEFT)) {
                     player.velX--;
                 }
-                if( forcesOnPlayer.containsKey(DIRECTION.RIGHT) ){
+                if (forcesOnPlayer.containsKey(DIRECTION.RIGHT)) {
                     player.velX++;
                 }
-                if( forcesOnPlayer.containsKey(DIRECTION.UP) ){
+                if (forcesOnPlayer.containsKey(DIRECTION.UP)) {
                     player.velY--;
                 }
-                if( forcesOnPlayer.containsKey(DIRECTION.DOWN) ){
+                if (forcesOnPlayer.containsKey(DIRECTION.DOWN)) {
                     player.velY++;
                 }
 
-                if( forcesOnPlayer.containsKey(DIRECTION.STOP) ){
+                if (forcesOnPlayer.containsKey(DIRECTION.STOP)) {
                     player.velX -= Math.signum(player.velX);
                     player.velY -= Math.signum(player.velY);
                 }
@@ -354,9 +456,9 @@ public class GameLogic {
                 }
 
                 // CHECK BALL COLLISIONS ON EVERYTHING
-                for( int i = 0; i < enemies.size(); i++ ) {
+                for (int i = 0; i < enemies.size(); i++) {
                     Mob enemy = enemies.get(i);
-                    for( int j = i + 1; j < enemies.size(); j++ ) {
+                    for (int j = i + 1; j < enemies.size(); j++) {
                         Mob enemy2 = enemies.get(j);
                         if (enemy.intersects(enemy2)) {
                             if (enemy2.isDestroyable()) {
@@ -375,7 +477,7 @@ public class GameLogic {
                         }
                     }
                     boolean enemyRemove = enemy.intersects(player);
-                    if( enemyRemove ) {
+                    if (enemyRemove) {
                         playerScore -= 100;
                         player.addHP(enemy.getDamage());
                         System.out.println("enemy.isDestroyable() " + enemy.isDestroyable());
@@ -396,14 +498,14 @@ public class GameLogic {
                             player.escape(enemy, width);
                         }
                     }
-                    playerCollided =  enemyRemove || playerCollided;
+                    playerCollided = enemyRemove || playerCollided;
                 }
-                if( playerCollided ){
+                if (playerCollided) {
                     // Stops lives being lost if green
-                    if( flashTimer <= 0 ){
-                        if( player.getHP() <= 0) {
+                    if (flashTimer <= 0) {
+                        if (player.getHP() <= 0) {
                             displayYouLose = true;
-                            // gameOver = true;
+                            gameOver = true;
                             pause(true);
                             System.out.println("playerScore + secondsAlive " + playerScore + " " + secondsAlive);
                             System.out.println("getplayerScore() + getSecondsAlive() " + getPlayerScore() + " " + getSecondsAlive());

@@ -51,6 +51,7 @@ public class Ball extends Mob{
         this.radius = radius;
     }
 
+
     public Ball(int damage) {
         this(10, Color.RED, -1, 200);
         setDamage(damage);

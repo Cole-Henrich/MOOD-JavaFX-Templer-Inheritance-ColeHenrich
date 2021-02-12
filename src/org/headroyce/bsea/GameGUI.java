@@ -1,14 +1,13 @@
 package org.headroyce.bsea;
 
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 /**
  * Represents the view element of the game
@@ -31,15 +30,18 @@ public class GameGUI extends StackPane {
         logic = new GameLogic(gameArea.getWidth(), gameArea.getHeight());
 
         reset = new Button("Reset");
-        youLose = new Button();
-        reset.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                reset.setVisible(false);
-                youLose.setVisible(false);
-                logic.reset();
-                logic.pause(false);
-            }
+        youLose = new Button("youLose");
+
+        Image image = new Image("file:///Users/cole.henrich/Desktop/Sprout.jpg");
+
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background background = new Background(backgroundImage);
+        reset.setBackground(background);
+        reset.setOnAction(actionEvent -> {
+            reset.setVisible(false);
+            youLose.setVisible(false);
+            logic.reset();
+            logic.pause(false);
         });
         reset.setVisible(false);
         youLose.setVisible(false);
@@ -132,14 +134,21 @@ public class GameGUI extends StackPane {
             GraphicsContext gc = gameArea.getGraphicsContext2D();
             gc.clearRect(0, 0, gameArea.getWidth(), gameArea.getHeight());
             if (logic.isDisplayYouLose()) {
-                youLose.setText("You lose! " + " You survived for " + logic.getSecondsAlive() + ", and your total score was " + logic.getPlayerScore() + ". Thanks for playing!");
+                String txt = ("""                 
+                                                                                                                                                                                                                                                                                                                
+                        """);
+
+                youLose.setText("\n" + txt + "\n You survived for " + logic.getSecondsAlive() + ", and your total score was " + logic.getPlayerScore());
+
+
                 System.out.println(" logic.getPlayerScore() + \" \" + logic.getSecondsAlive() " + logic.getPlayerScore() + " " + logic.getSecondsAlive());
                 youLose.setVisible(true);
                 System.out.println(" logic.getPlayerScore() + \" \" + logic.getSecondsAlive() " + logic.getPlayerScore() + " " + logic.getSecondsAlive());
                 youLose.toFront();
                 System.out.println(" logic.getPlayerScore() + \" \" + logic.getSecondsAlive() " + logic.getPlayerScore() + " " + logic.getSecondsAlive());
 
-            } else if (logic.isGameOver()) {
+            }
+            if (logic.isGameOver()) {
                 reset.setVisible(true);
                 reset.toFront();
             } else {
