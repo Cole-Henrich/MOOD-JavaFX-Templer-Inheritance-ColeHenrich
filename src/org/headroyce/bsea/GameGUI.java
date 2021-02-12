@@ -1,6 +1,7 @@
 package org.headroyce.bsea;
 
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Side;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -21,6 +22,7 @@ public class GameGUI extends StackPane {
     private final Button1 youLose;
 
     public GameGUI() {
+
         gameArea = new Canvas();
         gameArea.heightProperty().bind(this.heightProperty());
         gameArea.widthProperty().bind(this.widthProperty());
@@ -28,20 +30,27 @@ public class GameGUI extends StackPane {
         animTimer = new AnimTimer();
         logic = new GameLogic(gameArea.getWidth(), gameArea.getHeight());
         reset = new Button1("Reset");
-
         youLose = new Button1();
-        Image skull = new Image("file:///Users/cole.henrich/Desktop/Skull&Crossbones.png");
-        BackgroundImage skullImage = new BackgroundImage(skull, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(100, 100, true, true, true, true));
-        Background skullBackground = new Background(skullImage);
-        youLose.setBackground(skullBackground);
-        reset.setMinSize(100, 100);
-        Image image = new Image("file:///Users/cole.henrich/Desktop/Sprout.jpg");
-//        BackgroundPosition(Side horizontalSide, double horizontalPosition, boolean horizontalAsPercentage, Side verticalSide, double verticalPosition, boolean verticalAsPercentage)
-//        Creates a new BackgroundPosition.
 
-        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-        Background background = new Background(backgroundImage);
-        reset.setBackground(background);
+        Image skullImage = new Image("file:///Users/cole.henrich/Desktop/Skull&Crossbones.png");
+        BackgroundPosition skullPosition = new BackgroundPosition(Side.RIGHT, .5, true, Side.BOTTOM, 0.5, true);
+        BackgroundImage skullBackgroundImage = new BackgroundImage(skullImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, skullPosition, BackgroundSize.DEFAULT);
+        Background skull = new Background(skullBackgroundImage);
+        youLose.setBackground(skull);
+
+        /*
+        Beginning of sprout background creation
+         */
+        Image sproutImage = new Image("file:///Users/cole.henrich/Desktop/Sprout.jpg");
+        BackgroundPosition sproutPosition = new BackgroundPosition(Side.RIGHT, .5, true, Side.BOTTOM, .99, true);
+        BackgroundImage sproutBackgroundImage = new BackgroundImage(sproutImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, sproutPosition, BackgroundSize.DEFAULT);
+        Background sprout = new Background(sproutBackgroundImage);
+        reset.setBackground(sprout);
+        reset.setLayoutX((gameArea.getWidth() / 2 - (reset.getWidth() / 2)));
+        reset.setLayoutY(1);
+        /*
+        End of sprout background creation
+         */
         reset.setOnAction(actionEvent -> {
             reset.setVisible(false);
             youLose.setVisible(false);
@@ -84,7 +93,6 @@ public class GameGUI extends StackPane {
     public void handleKeyPress(KeyEvent event){
         if( event.getCode() == KeyCode.A){
             logic.applyForce(GameLogic.DIRECTION.LEFT);
-
         }
         if( event.getCode() == KeyCode.D ) {
             logic.applyForce(GameLogic.DIRECTION.RIGHT);
@@ -103,7 +111,6 @@ public class GameGUI extends StackPane {
         if( event.getCode() == KeyCode.SPACE ){
             logic.applyForce(GameLogic.DIRECTION.STOP);
         }
-
     }
 
     /**
@@ -137,23 +144,33 @@ public class GameGUI extends StackPane {
 
         @Override
         public void handle(long now) {
-
             GraphicsContext gc = gameArea.getGraphicsContext2D();
-            youLose.setSize(gameArea.getWidth() - 10, gameArea.getHeight() - 10, gameArea.getWidth(), gameArea.getHeight());
+            youLose.setPrefSize(gameArea.getWidth(), gameArea.getHeight());
             gc.clearRect(0, 0, gameArea.getWidth(), gameArea.getHeight());
             if (logic.isDisplayYouLose()) {
-                String txt = ("""                 
-                                                                                                                                                                                                                                                                                                                
-                        """);
-                youLose.setText("\n" + txt + "\n You survived for: \n" +
-                        "" + logic.getSecondsAlive() + " seconds,\n" +
-                        " and your total score was " + logic.getPlayerScore() + " points. ");
+                String space = """                        
+                                               
+                                             
+                                               
+                            
+                            
+                            
+                            
+                        """;
+                youLose.setText(space + "Game Over, You Lose! \n" +
+                        " You survived for " + logic.getSecondsAlive() + " seconds, \n" +
+                        " and your total score was " + logic.getPlayerScore() + " points.\n" +
+                        " Thank you for playing.\n" +
+                        " We hope you had fun! ");
+                youLose.autoSize(gameArea.getWidth());
                 youLose.setVisible(true);
                 youLose.toFront();
             }
             if (logic.isGameOver()) {
+                reset.autoSize(gameArea.getWidth());
                 reset.setVisible(true);
                 reset.toFront();
+
             } else {
                 logic.render(gameArea);
             }

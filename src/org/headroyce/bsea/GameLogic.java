@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -36,7 +35,7 @@ public class GameLogic {
     private final ArrayList<Mob> enemies;
 
     private static final int PLAYER_SCORING_TIME = 1000;
-    private static final int PLAYER_SCORING_POINTS = 10; //10;
+    private static final int PLAYER_SCORING_POINTS = 10;
     private int PLAYER_SCORING_TIMER = 1000;
 
     private int secondsAlive = 0;
@@ -46,11 +45,11 @@ public class GameLogic {
         return playerScore;
     }
 
-    private static final int ENEMY_SPAWN_TIME = 150;
+    private static final int ENEMY_SPAWN_TIME = 1000;//150;
     private static final int ENEMY_DIRECTION_PROBABILITY = 5;
     private static final int ENEMY_SPAWN_PROBABILITY = 5;
     private static final int OBSTACLE_SPAWN_PROBABILITY = 10;
-    private int ENEMY_SPAWN_TIMER = 150;
+    private int ENEMY_SPAWN_TIMER = 1000; //150;
     private int flashTimer = 0;
 
     // Width and height of the canvas
@@ -108,10 +107,6 @@ public class GameLogic {
         return secondsAlive;
     }
 
-    public void setSecondsAlive(int secsAlive) {
-        secondsAlive = secsAlive;
-    }
-
     public void reset() {
 
         player.x = 200;
@@ -123,7 +118,7 @@ public class GameLogic {
         player.setVelocityBoundY(-7, 7);
 
 
-        player.addHP(1);
+        player.addHP(3);
         enemies.clear();
         forcesOnPlayer.clear();
 
@@ -168,7 +163,7 @@ public class GameLogic {
 
         boolean collided = false;
 
-        // Keep player with the window
+        // Keep player within the window
 
         if (player == this.player) {
             if (player.y + player.getHeight() > height) {
@@ -183,7 +178,6 @@ public class GameLogic {
                 collided = true;
             }
         }
-
 
         if (player.x + player.getWidth() > width) {
             player.x = width - player.getWidth();
@@ -207,107 +201,7 @@ public class GameLogic {
         forcesOnPlayer.remove(direction);
     }
 
-    private String[] getArt() {
-        return new String[]{
-                """
-                      
-                      0
-                    0   0
-                   0     0
-                    0   0
-                      0
-              
-                  """,
-                """
-                   1
-                   1
-                   1
-                   1
-                """,
-                """
-                  22
-                2   2
-                   2
-                  2
-                2222222 
-                """,
-                """
-                333
-                   3
-                333
-                   3
-                333
-                
-                """,
-                """
-                    4
-                   44
-                 4  4
-                4444444
-                   4
-                   4
-                """,
-                """
-                55555
-                55
-                5555
-                   55
-                5555
-                
-                """,
-                """
-                    6
-                   6
-                  6 66
-                  6   6
-                   66
-                """,
-                """
-                77777
-                   7
-                  7
-                 7
-                7
-                """,
-                """
-                  888
-                 8   8
-                8     8
-                 8   8
-                  888
-                 8   8
-                8     8
-                 8   8
-                  888
-                   
-                """,
-                """
-                  99
-                9    9
-                9     9
-                 99999
-                     9
-                    9
-                   9
-                  9
-                 9
-                9
-                """
-        };
-    }
 
-    private String intToWordArt(int number) {
-        String[] art = getArt();
-        System.out.println(Arrays.toString(art));
-        String num = String.valueOf(number);
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < num.length(); i++) {
-            int val = Integer.parseInt(String.valueOf(num.charAt(i)));
-            result.append(art[val]);
-
-        }
-        return result.toString();
-    }
 
     /**
      * Runs once per game tick which is set dynamically by the GAME_STEP_TIMER
@@ -381,9 +275,6 @@ public class GameLogic {
                         Obstacle obstacle = new Obstacle(width);
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
-                            if (enemy != null) {
-                                System.out.println(" new obstacle: " + enemy.getClass() + "  enemy.x " + enemy.x + "  enemy.y " + enemy.y);
-                            }
                             enemy.y = -1 * enemy.getHeight();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
                             enemy.setVelocityBoundY(0, 10);
@@ -442,9 +333,7 @@ public class GameLogic {
                     collideWalls(enemy);
                     if (enemy.y > height) {
                         enemies.remove(enemy);
-                        System.out.println(enemy.getClass() + " " + enemy.getOffPoints());
                         playerScore += enemy.getOffPoints();
-                        System.out.println(playerScore);
                         i--;
                     }
                 }
@@ -467,17 +356,12 @@ public class GameLogic {
                             } else {
                                 enemy2.escape(enemy, width);
                             }
-                            // j -= 2;
                         }
                     }
                     boolean enemyRemove = enemy.intersects(player);
                     if (enemyRemove) {
                         playerScore -= 100;
                         player.addHP(enemy.getDamage());
-                        System.out.println("enemy.isDestroyable() " + enemy.isDestroyable());
-                        System.out.println("enemy.getDamage() " + enemy.getDamage() + "   enemy.getClass()  " + enemy.getClass() + "   enemy.getColor() " + enemy.getColor() + "  enemy.getClass().getSuperclass() " + enemy.getClass().getSuperclass());
-                        double veloX = player.velX;
-                        double veloY = player.velY;
                         player.velX = enemy.velX;
                         player.velY = enemy.velY;
 
@@ -497,10 +381,6 @@ public class GameLogic {
                             displayYouLose = true;
                             gameOver = true;
                             pause(true);
-                            System.out.println("playerScore + secondsAlive " + playerScore + " " + secondsAlive);
-                            System.out.println("getplayerScore() + getSecondsAlive() " + getPlayerScore() + " " + getSecondsAlive());
-
-
                         }
                     }
                     flashTimer = PLAYER_FLASH_TIME;

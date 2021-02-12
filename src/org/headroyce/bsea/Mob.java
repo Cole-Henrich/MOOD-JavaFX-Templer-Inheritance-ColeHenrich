@@ -208,7 +208,8 @@ public class Mob {
     }
 
     /**
-     * Set the offPoints of this object.
+     * Set the offPoints of this object
+     * which are the damage it will do to the player on collision.
      *
      * @param offPoints the proposed offPoints
      * @return true if the offPoints are set, false if not.
@@ -363,7 +364,6 @@ public class Mob {
      */
     public boolean isRed(Color color) {
         double threshold = 0.64 * color.getRed();
-        System.out.println("RED!  " + this.getClass());
         return (color.getBlue() < threshold && color.getGreen() < threshold);
     }
 
