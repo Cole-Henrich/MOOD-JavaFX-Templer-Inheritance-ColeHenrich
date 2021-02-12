@@ -45,6 +45,7 @@ public class Ball extends Mob{
         if (radius <= 0) {
             radius = 1;
         }
+        setDestroyable(true);
         setDamage(damage);
         setOffPoints(offPoints);
         this.radius = radius;

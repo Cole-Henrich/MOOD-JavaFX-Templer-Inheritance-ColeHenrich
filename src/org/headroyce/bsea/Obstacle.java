@@ -14,7 +14,7 @@ public class Obstacle extends Mob {
      * Creates an obstacle with a width of ten and height of five
      */
     public Obstacle() {
-        this(10, 40, Color.PURPLE, -1, 1, 100);
+        this(10, 40, Color.PURPLE, -1, true, 100);
 
     }
 
@@ -36,12 +36,13 @@ public class Obstacle extends Mob {
         setHeight(height);
     }
 
-    public Obstacle(double width, double height, Color color, int damage, int destroyable, int offPoints) {
+    public Obstacle(double width, double height, Color color, int damage, boolean destroyable, int offPoints) {
         setColor(color);
         setDamage(damage);
         setWidth(width);
         setHeight(height);
         setOffPoints(offPoints);
+        setDestroyable(destroyable);
     }
 
     /**
@@ -63,8 +64,5 @@ public class Obstacle extends Mob {
         gc.setFill(this.getColor());
         gc.fillRect(x, y, getWidth(), getHeight());
 
-    }
-
-    public void getDestroyable(Obstacle obstacle){
     }
 }

@@ -7,11 +7,7 @@ import javafx.scene.paint.Color;
 public class Mob {
     char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    public Mob(int damage, int offPoints, int destroyable) {
-        setDamage(damage);
-        setOffPoints(offPoints);
-        setDestroyable(destroyable);
-    }
+    private boolean destroyable;
 
     private Color color;
     private double hp;
@@ -25,10 +21,15 @@ public class Mob {
     public double velX, velY;
     private double[] boundY = new double[2];
     private double offPoints;
-    private int destroyable;
+
+    public Mob(int damage, int offPoints, boolean destroyable) {
+        setDamage(damage);
+        setOffPoints(offPoints);
+        setDestroyable(destroyable);
+    }
 
     public Mob() {
-        this(-1, 100, 1);
+        this(-1, 100, true);
     }
 
     public Mob(int damage, int offPoints) {
@@ -145,12 +146,9 @@ public class Mob {
      * @param destroyable the new destroyable value.
      * @return true if the destroyable is 1 or 0; false otherwise.
      */
-    public boolean setDestroyable(int destroyable) {
-        if (destroyable == 1 || destroyable == 0) {
-            this.destroyable = destroyable;
-            return true;
-        }
-        return false;
+    public boolean setDestroyable(boolean destroyable) {
+        this.destroyable = destroyable;
+        return true;
     }
 
     /**
@@ -158,7 +156,7 @@ public class Mob {
      * Whether it disappears on collision or not.
      */
     public boolean isDestroyable() {
-        return this.destroyable == 1;
+        return this.destroyable;
     }
 
     /**

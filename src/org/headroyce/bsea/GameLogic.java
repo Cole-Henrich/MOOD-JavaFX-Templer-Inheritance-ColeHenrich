@@ -349,9 +349,15 @@ public class GameLogic {
                     Mob enemy = enemies.get(i);
                     for( int j = i + 1; j < enemies.size(); j++ ) {
                         if (enemy.intersects(enemies.get(j))) {
-                            enemies.remove(j);
-                            enemies.remove(enemy);
-                            j -= 2;
+                            if (!enemies.get(j).isDestroyable()) {
+                                enemies.remove(j);
+                                j -= 1;
+                            }
+                            if (!enemy.isDestroyable()) {
+                                enemies.remove(enemy);
+                                j -= 1;
+                            }
+                            // j -= 2;
                         }
                     }
                     boolean enemyRemove = enemy.intersects(player);
@@ -365,6 +371,12 @@ public class GameLogic {
                         if (enemy.isDestroyable()) {
                             enemies.remove(enemy);
                             i--;
+                        } else {
+                            if (enemy.x > width / 2) {
+                                player.x = enemy.x - 30;
+                            } else {
+                                player.x = enemy.x + enemy.getWidth() + 30;
+                            }
                         }
                     }
                     playerCollided =  enemyRemove || playerCollided;
