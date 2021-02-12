@@ -8,7 +8,6 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -46,7 +45,7 @@ public class GameLogic {
 
     private static final int ENEMY_SPAWN_TIME = 4000; //150;
     private static final int ENEMY_DIRECTION_PROBABILITY = 5;
-    private static final int ENEMY_SPAWN_PROBABILITY = 98; //5;
+    private static final int ENEMY_SPAWN_PROBABILITY = 40; //5;
     private static final int OBSTACLE_SPAWN_PROBABILITY = 99;//10;
     private int ENEMY_SPAWN_TIMER = 4000; //150;
     private int flashTimer = 0;
@@ -273,14 +272,14 @@ public class GameLogic {
                         if (Math.random() > 0.5) {
                             spikeX = width;
                         }
-                        SpikedWall spikedWall = new SpikedWall(spikeX, Math.random() * ((width * 0.4) - 5) + 5); //thank you rosses
+                        SpikedWall spikedWall = new SpikedWall(spikeX, 30);//Math.random() * ((width * 0.4) - 5) + 5); //thank you rosses
                         Obstacle obstacle = new Obstacle();
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
-                            if (enemy != null) {
-                                // System.out.println(" new obstacle: " + enemy.getClass() + "  enemy.x " + enemy.x + "  enemy.y " + enemy.y);
-                            }
-                            Objects.requireNonNull(enemy).y = -1 * enemy.getHeight();  // off screen
+//                            if (enemy != null) {
+//                                System.out.println(" new obstacle: " + enemy.getClass() + "  enemy.x " + enemy.x + "  enemy.y " + enemy.y);
+//                            }
+                            enemy.y = -1 * enemy.getHeight();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
                             enemy.setVelocityBoundY(0, 10);
                             enemy.velY = 5;
