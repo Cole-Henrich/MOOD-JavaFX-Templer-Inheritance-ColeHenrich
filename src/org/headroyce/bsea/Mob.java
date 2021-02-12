@@ -5,8 +5,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 
 public class Mob {
-    char[] hexadecimal = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-
     private boolean destroyable;
 
     private Color color;
@@ -22,18 +20,36 @@ public class Mob {
     private final double[] boundY = new double[2];
     private double offPoints;
 
+    /**
+     * Creates a Mob with custom damage, offPoints, and destructibility.
+     *
+     * @param damage      the amount of HP to deduct from player in collision
+     * @param offPoints   amount of points to give to player when Mob leaves.
+     * @param destroyable whether the Mob disappears after a collision
+     */
     public Mob(int damage, int offPoints, boolean destroyable) {
         setDamage(damage);
         setOffPoints(offPoints);
         setDestroyable(destroyable);
     }
 
+    /**
+     * Creates a destroyable Mob with a damage of -1 and 100 offPoints.
+     */
     public Mob() {
         this(-1, 100, true);
     }
 
-
-
+    /**
+     * Sets the amount of damage this Mob will give.
+     *
+     * @param damage HP to deduct from player on collision.
+     * @param min    universal minimum acceptable damage -
+     *               e.g., you might set it to -3
+     *               because the player can't lose more than 3 lives.
+     * @param max    universal maximum acceptable damage.
+     * @return if the damage is within the range of min and max.
+     */
     public boolean setDamage(int damage, int min, int max) {
         boolean rtn = false;
         if (damage >= min && damage <= max) {
@@ -43,6 +59,13 @@ public class Mob {
         return rtn;
     }
 
+    /**
+     * Sets the amount of damage this Mob will give with default limits.
+     *
+     * @param damage HP to deduct from player on collision.
+     *               min = -10, max = 10;
+     * @return if the damage is within the range of min and max.
+     */
     public boolean setDamage(int damage) {
         boolean rtn = false;
         if (setDamage(damage, -10, 10)) {
@@ -127,11 +150,9 @@ public class Mob {
      * Sets the destructibility of the object.
      *
      * @param destroyable the new destroyable value.
-     * @return true if the destroyable is 1 or 0; false otherwise.
      */
-    public boolean setDestroyable(boolean destroyable) {
+    public void setDestroyable(boolean destroyable) {
         this.destroyable = destroyable;
-        return true;
     }
 
     /**
@@ -309,7 +330,7 @@ public class Mob {
      * @return true if this objects intersect, false otherwise
      */
     public boolean intersects(Mob other){
-        if( this.x + this.getWidth() < other.x ){
+        if (this.x + this.getWidth() < other.x) {
             return false;
         }
         if (this.x > other.x + other.getWidth()) {
@@ -321,27 +342,43 @@ public class Mob {
         return !(this.y > other.y + other.getHeight());
     }
 
+    /**
+     * empty for now.
+     */
     public void render(Canvas canvas) {
     }
 
-
+    /**
+     * @return a Color with random rgba values.
+     */
     public Color getRandomColor() {
         return new Color(Math.random(), Math.random(), Math.random(), Math.random());
     }
 
-    public boolean isGreen(Color color) {
-        double threshold = 0.64 * color.getGreen();
-        System.out.println("GREEN!");
-        return (color.getBlue() < threshold && color.getRed() < threshold);
-    }
-
+    /**
+     * @param color a color, the redness of which you want to know.
+     *              Checks to see if the r value of rgba is substantially greater than the g and b values.
+     *              If so, it is considered in a red range.
+     * @return whether the color is red
+     */
     public boolean isRed(Color color) {
         double threshold = 0.64 * color.getRed();
-        System.out.println("RED!");
+        System.out.println("RED!  " + this.getClass());
         return (color.getBlue() < threshold && color.getGreen() < threshold);
     }
 
-    public void escape(Mob this, Mob chaser, double canvasWidth) {
+    /**
+     * Allows a small indestructible Mob to escape from under a large indestructible Mob, and avoid being crushed.
+     * This is currently useful in saving the player from getting repetitively damaged while under a spikedWall.
+     *
+     * @param canvasWidth the width of the screen,
+     *                    useful in determining whether the small Mob should escape to the right or left of the large Mob,
+     *                    in order to prevent the small mob from escaping into a wall.
+     *                    The small Mob will escape to the right if the large Mob is in the left half of the screen,
+     *                    and the small Mob will escape to the left if the large Mob is in the right half of the screen.
+     * @param chaser      the large indestructible Mob.
+     */
+    public void escape(Mob chaser, double canvasWidth) {
         if (chaser.getHeight() > this.getHeight() && chaser.y - chaser.getHeight() < this.y) {
             if (chaser.x > canvasWidth / 2) {
                 this.x = chaser.x - 30;

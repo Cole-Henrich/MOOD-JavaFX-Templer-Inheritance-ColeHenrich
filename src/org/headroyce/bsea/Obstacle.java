@@ -11,11 +11,10 @@ import javafx.scene.paint.Color;
 public class Obstacle extends Mob {
    public GameLogic logic = new GameLogic(getWidth(), getHeight());
     /**
-     * Creates an obstacle with a width of ten and height of five
+     * Creates a destroyable PURPLE obstacle with a width of ten and height of 40, a damage of -1, and 100 offPoints.
      */
-    public Obstacle() {
-        this(10, 40, Color.PURPLE, -1, true, 100);
-
+    public Obstacle(double canvasWidth) {
+        this((int) (Math.random() * canvasWidth), 10, 40, Color.PURPLE, -1, true, 100);
     }
 
     /**
@@ -36,13 +35,22 @@ public class Obstacle extends Mob {
         setHeight(height);
     }
 
-    public Obstacle(double width, double height, Color color, int damage, boolean destroyable, int offPoints) {
+    /**
+     * @param x     the x coordinate.
+     *              While it *can* be any value, it is intended to be either 1 or the width of the screen,
+     *              which is handled in GameLogic.
+     * @param width the width of the spikedWall.
+     *              GameLogic prevents it from being less than 5px and more than 40% of the width of the screen.
+     */
+
+    public Obstacle(int x, double width, double height, Color color, int damage, boolean destroyable, int offPoints) {
         setColor(color);
         setDamage(damage);
         setWidth(width);
         setHeight(height);
         setOffPoints(offPoints);
         setDestroyable(destroyable);
+        this.x = x;
         setVelocityBoundX(0, 0);
         setVelocityBoundY(0, 5);
     }
@@ -61,10 +69,14 @@ public class Obstacle extends Mob {
         return this.intersects(o);
     }
 
+    /**
+     * Renders the obstacle.
+     *
+     * @param canvas the canvas to render on
+     */
     public void render(Canvas canvas) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(this.getColor());
         gc.fillRect(x, y, getWidth(), getHeight());
-
     }
 }

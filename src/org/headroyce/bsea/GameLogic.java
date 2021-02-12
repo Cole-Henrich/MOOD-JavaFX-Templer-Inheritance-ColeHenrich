@@ -58,7 +58,7 @@ public class GameLogic {
 
     public GameLogic(double width, double height) {
         rand = new Random();
-        System.out.println(intToWordArt(10));
+
         gameTimer = new GameTimer();
 
         this.width = Math.abs(width);
@@ -123,7 +123,7 @@ public class GameLogic {
         player.setVelocityBoundY(-7, 7);
 
 
-        player.addHP(3);
+        player.addHP(1);
         enemies.clear();
         forcesOnPlayer.clear();
 
@@ -358,12 +358,6 @@ public class GameLogic {
                                 Sprinkle sprinkle = new Sprinkle();
                                 either.add(sprinkle);
                             }
-                            if (lantern.isGreen(lantern.getColor())) {
-                                for (int i = 0; i < 100; i++) {
-                                    LifeGiver lg = new LifeGiver();
-                                    either.add(lg);
-                                }
-                            }
                         }
                         either.add(lifeGiver);
                         either.add(unAmigo);
@@ -382,9 +376,9 @@ public class GameLogic {
                         if (Math.random() > 0.5) {
                             spikeX = width;
                         }
-                        SpikedWall spikedWall = new SpikedWall(spikeX, Math.random() * ((width * 0.4) - 5) + 5); //thank you rosses
+                        SpikedWall spikedWall = new SpikedWall(width);
                         spikedWall.setVelocityBoundX(0, 0);
-                        Obstacle obstacle = new Obstacle();
+                        Obstacle obstacle = new Obstacle(width);
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
                             if (enemy != null) {
@@ -486,10 +480,6 @@ public class GameLogic {
                         double veloY = player.velY;
                         player.velX = enemy.velX;
                         player.velY = enemy.velY;
-                        if ((veloX < enemy.getVelocityBoundX()[1]) && (veloY < enemy.getVelocityBoundY()[1])) {
-//                            enemy.velX = veloX;
-//                            enemy.velY = veloY;
-                        }
 
                         if (enemy.isDestroyable()) {
                             enemies.remove(enemy);
