@@ -14,12 +14,12 @@ public class Mob {
     private double damage;
     // [0] - lower bound
     // [1] - upper bound
-    private double[] boundX = new double[2];
+    private final double[] boundX = new double[2];
     private double width, height;
 
     public double x, y;         // Center point of the circle
     public double velX, velY;
-    private double[] boundY = new double[2];
+    private final double[] boundY = new double[2];
     private double offPoints;
 
     public Mob(int damage, int offPoints, boolean destroyable) {
@@ -32,23 +32,6 @@ public class Mob {
         this(-1, 100, true);
     }
 
-    public Mob(int damage, int offPoints) {
-        setColor(Color.BLACK);
-        boundX = new double[2];
-        boundY = new double[2];
-        setDamage(damage);
-        setOffPoints(offPoints);
-    }
-
-    /*
-    Some green colors are
-                          00FFC0 ---> 00FF00
-                          00FF00 ---> A0FF00
-
-     */
-    private void makeGreen() {
-
-    }
 
 
     public boolean setDamage(int damage, int min, int max) {
@@ -341,6 +324,7 @@ public class Mob {
     public void render(Canvas canvas) {
     }
 
+
     public Color getRandomColor() {
         return new Color(Math.random(), Math.random(), Math.random(), Math.random());
     }
@@ -355,5 +339,15 @@ public class Mob {
         double threshold = 0.64 * color.getRed();
         System.out.println("RED!");
         return (color.getBlue() < threshold && color.getGreen() < threshold);
+    }
+
+    public void escape(Mob this, Mob chaser, double canvasWidth) {
+        if (chaser.getHeight() > this.getHeight()) {
+            if (chaser.x > canvasWidth / 2) {
+                this.x = chaser.x - 30;
+            } else {
+                this.x = chaser.x + chaser.getWidth() + 30;
+            }
+        }
     }
 }

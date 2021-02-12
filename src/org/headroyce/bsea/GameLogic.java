@@ -37,7 +37,9 @@ public class GameLogic {
     private static final int PLAYER_SCORING_TIME = 1000;
     private static final int PLAYER_SCORING_POINTS = 10; //10;
     private int PLAYER_SCORING_TIMER = 1000;
+    private final double WIDTH = 0;
     private int secondsAlive = 0;
+
 
     public int getPlayerScore() {
         return playerScore;
@@ -59,6 +61,7 @@ public class GameLogic {
         gameTimer = new GameTimer();
 
         this.width = Math.abs(width);
+
         this.height = Math.abs(height);
 
         player = new Ball();
@@ -68,6 +71,7 @@ public class GameLogic {
 
         reset();
     }
+
 
     /**
      * Renders the game elements onto a canvas
@@ -244,7 +248,7 @@ public class GameLogic {
                             lantern.setDamage(-2);
                             lantern.x = 300;
                             lantern.y = 300;
-                            for (int i = 0; i < 100; i++) {
+                            for (int i = 0; i < 20; i++) {
                                 Sprinkle sprinkle = new Sprinkle();
                                 either.add(sprinkle);
                             }
@@ -268,7 +272,7 @@ public class GameLogic {
                             enemies.add(enemy);
                         }
                     } else {
-                        double spikeX = 2;
+                        double spikeX = 1;
                         if (Math.random() > 0.5) {
                             spikeX = width;
                         }
@@ -276,9 +280,9 @@ public class GameLogic {
                         Obstacle obstacle = new Obstacle();
                         Obstacle[] rectangles = {spikedWall, obstacle};
                         for (Obstacle enemy : rectangles) {
-//                            if (enemy != null) {
-//                                System.out.println(" new obstacle: " + enemy.getClass() + "  enemy.x " + enemy.x + "  enemy.y " + enemy.y);
-//                            }
+                            if (enemy != null) {
+                                System.out.println(" new obstacle: " + enemy.getClass() + "  enemy.x " + enemy.x + "  enemy.y " + enemy.y);
+                            }
                             enemy.y = -1 * enemy.getHeight();  // off screen
                             enemy.setVelocityBoundX(-5, 5);
                             enemy.setVelocityBoundY(0, 10);
@@ -348,14 +352,19 @@ public class GameLogic {
                 for( int i = 0; i < enemies.size(); i++ ) {
                     Mob enemy = enemies.get(i);
                     for( int j = i + 1; j < enemies.size(); j++ ) {
-                        if (enemy.intersects(enemies.get(j))) {
-                            if (!enemies.get(j).isDestroyable()) {
-                                enemies.remove(j);
-                                j -= 1;
+                        Mob enemy2 = enemies.get(j);
+                        if (enemy.intersects(enemy2)) {
+                            if (enemy2.isDestroyable()) {
+                                enemies.remove(enemy2);
+                                j--;
+                            } else {
+                                enemy.escape(enemy2, width);
                             }
-                            if (!enemy.isDestroyable()) {
+                            if (enemy.isDestroyable()) {
                                 enemies.remove(enemy);
-                                j -= 1;
+                                j--;
+                            } else {
+                                enemy2.escape(enemy, width);
                             }
                             // j -= 2;
                         }
@@ -372,11 +381,7 @@ public class GameLogic {
                             enemies.remove(enemy);
                             i--;
                         } else {
-                            if (enemy.x > width / 2) {
-                                player.x = enemy.x - 30;
-                            } else {
-                                player.x = enemy.x + enemy.getWidth() + 30;
-                            }
+                            player.escape(enemy, width);
                         }
                     }
                     playerCollided =  enemyRemove || playerCollided;
