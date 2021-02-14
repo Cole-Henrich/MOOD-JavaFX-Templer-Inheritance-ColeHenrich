@@ -75,7 +75,6 @@ public class GameLogic {
         enemies = new ArrayList<>();
 
         forcesOnPlayer = new HashMap<>();
-
         reset();
     }
 
@@ -105,9 +104,13 @@ public class GameLogic {
 
         // Draw lives and score last so that the balls go under them
         Text lives = new Text("Lives: " + Math.round(player.getHP()));
-
         gc.strokeText("Score: " + playerScore, 10, 30);
         gc.strokeText(lives.getText(), width - 10 - lives.getLayoutBounds().getWidth(), 20);
+        showPlayerInstruction(gc, true);
+    }
+
+    public void showPlayerInstruction(GraphicsContext gc, boolean run) {
+        new PlayerInstructions(gc, run);
     }
 
     public int getSecondsAlive() {

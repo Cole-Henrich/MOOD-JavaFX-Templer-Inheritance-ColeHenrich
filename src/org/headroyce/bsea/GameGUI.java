@@ -20,6 +20,8 @@ public class GameGUI extends StackPane {
 
     private final Button1 reset;
     private final Button1 youLose;
+    private final Button1 Pause;
+    private final Button1 showInstructions;
 
     public GameGUI() {
 
@@ -31,16 +33,20 @@ public class GameGUI extends StackPane {
         logic = new GameLogic(gameArea.getWidth(), gameArea.getHeight());
         reset = new Button1("Reset");
         youLose = new Button1();
+        Pause = new Button1("Pause");
+        showInstructions = new Button1("Show Instructions");
 
         Image skullImage = new Image("file:///Users/cole.henrich/Desktop/Skull&Crossbones.png");
         BackgroundPosition skullPosition = new BackgroundPosition(Side.RIGHT, .5, true, Side.BOTTOM, 0.5, true);
         BackgroundImage skullBackgroundImage = new BackgroundImage(skullImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, skullPosition, BackgroundSize.DEFAULT);
         Background skull = new Background(skullBackgroundImage);
         youLose.setBackground(skull);
-
         /*
-        Beginning of sprout background creation
-         */
+       Beginning of Reset Button Creation
+        */
+            /*
+            Beginning of sprout background creation
+             */
         Image sproutImage = new Image("file:///Users/cole.henrich/Desktop/Sprout.jpg");
         BackgroundPosition sproutPosition = new BackgroundPosition(Side.RIGHT, .5, true, Side.BOTTOM, .99, true);
         BackgroundImage sproutBackgroundImage = new BackgroundImage(sproutImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, sproutPosition, BackgroundSize.DEFAULT);
@@ -48,20 +54,41 @@ public class GameGUI extends StackPane {
         reset.setBackground(sprout);
         reset.setLayoutX((gameArea.getWidth() / 2 - (reset.getWidth() / 2)));
         reset.setLayoutY(1);
-        /*
-        End of sprout background creation
-         */
+            /*
+            End of sprout background creation
+             */
         reset.setOnAction(actionEvent -> {
             reset.setVisible(false);
             youLose.setVisible(false);
+            Pause.setVisible(true);
+            showInstructions.setVisible(true);
             logic.reset();
             logic.pause(false);
         });
+       /*
+       End of Reset Button Creation
+        */
+
+       /*
+       Beginning of Pause creation
+        */
+        Pause.setLayoutX(gameArea.getWidth() - Pause.getWidth());
+        Pause.setLayoutY(50);
+        Pause.setVisible(true);
+        Pause.setOnMouseClicked(mouseEvent -> pause(true, true));
+        /*
+        End of Pause Creation
+         */
+
+
         reset.setVisible(false);
         youLose.setVisible(false);
         this.getChildren().add(reset);
         this.getChildren().add(youLose);
+        this.getChildren().add(Pause);
+        this.getChildren().add(showInstructions);
         this.getChildren().add(gameArea);
+
     }
 
     /**
@@ -77,7 +104,8 @@ public class GameGUI extends StackPane {
     }
 
     /**
-     * Pause/unpause teh animation and game timer
+     * Pause/unpause the animation and game timer
+     *
      * @param setAnimPause true to pause the animation timer
      * @param setGamePause true to pause the game timer
      */
@@ -147,7 +175,9 @@ public class GameGUI extends StackPane {
             GraphicsContext gc = gameArea.getGraphicsContext2D();
             youLose.setPrefSize(gameArea.getWidth(), gameArea.getHeight());
             gc.clearRect(0, 0, gameArea.getWidth(), gameArea.getHeight());
+            Pause.autoSize(gameArea.getWidth(), 0.02);
             if (logic.isDisplayYouLose()) {
+                Pause.setVisible(false);
                 String space = """                        
                                                
                                              
@@ -167,6 +197,7 @@ public class GameGUI extends StackPane {
                 youLose.toFront();
             }
             if (logic.isGameOver()) {
+                Pause.setVisible(false);
                 reset.autoSize(gameArea.getWidth());
                 reset.setVisible(true);
                 reset.toFront();
@@ -174,7 +205,6 @@ public class GameGUI extends StackPane {
             } else {
                 logic.render(gameArea);
             }
-
         }
     }
 }

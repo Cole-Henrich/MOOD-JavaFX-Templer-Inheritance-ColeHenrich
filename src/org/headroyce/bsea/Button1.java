@@ -29,8 +29,19 @@ public class Button1 extends Button {
      *
      * @param canvasWidth the width of the screen
      */
-    public void autoSize(double canvasWidth) {
-        int autoFontSize = (int) (canvasWidth / 25);
+    public int autoSize(double canvasWidth) {
+        return autoSize(canvasWidth, 0.04);
+    }
+
+    /**
+     * AutoSizes the font to a given ratio of the current screen size.
+     *
+     * @param canvasWidth       the width of the screen
+     * @param fontToScreenRatio for example, 0.04 means the font height will be 0.04 * the screen width.
+     */
+    public int autoSize(double canvasWidth, double fontToScreenRatio) {
+        int autoFontSize = (int) (canvasWidth * fontToScreenRatio);
         this.setFontSize(autoFontSize);
+        return autoFontSize;
     }
 }
