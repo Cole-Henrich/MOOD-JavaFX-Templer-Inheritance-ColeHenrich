@@ -33,15 +33,23 @@ public class Main extends Application {
         });
         primaryStage.show();
 
-        root.pause(false,false);
+        root.pause(false, false);
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        new Setter(
+                false,
+                false,
+                false,
+                false,
+                false
+        );
         launch(args);
     }
+
     private class KeyPressHandler implements EventHandler<KeyEvent> {
-        public void handle(KeyEvent event){
+        public void handle(KeyEvent event) {
             System.err.println("KEY PRESS");
         }
     }
@@ -51,4 +59,5 @@ public class Main extends Application {
             System.err.println("KEY RELEASE");
         }
     }
+
 }

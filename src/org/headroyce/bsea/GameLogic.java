@@ -17,8 +17,14 @@ public class GameLogic {
 
     private boolean displayYouLose;
 
-    // The game step in milliseconds
-    public static final int GAME_STEP_TIMER = 17;
+
+    /*
+    The game step in milliseconds
+     see parameter
+     String prompt
+     in the constructor utilizing the super constructor of setValues in SetGameStep.java for more info.
+     */
+    public static /*final*/ double GAME_STEP_TIMER = 17;
     private final GameTimer gameTimer;
 
     private boolean gameOver;
@@ -45,17 +51,18 @@ public class GameLogic {
         return playerScore;
     }
 
-    private static final int ENEMY_SPAWN_TIME = 1000;//150;
-    private static final int ENEMY_DIRECTION_PROBABILITY = 5;
-    private static final int ENEMY_SPAWN_PROBABILITY = 5;
-    private static final int OBSTACLE_SPAWN_PROBABILITY = 10;
-    private int ENEMY_SPAWN_TIMER = 1000; //150;
+    public /*private*/ static /*final*/ int ENEMY_SPAWN_TIME = 150;
+    public /*private*/ static /*final*/ int ENEMY_DIRECTION_PROBABILITY = 5;
+    public  /*private*/ static /*final*/ int ENEMY_SPAWN_PROBABILITY = 5;
+    public /*private*/ static /*final*/ int OBSTACLE_SPAWN_PROBABILITY = 10;
+    /*private*/ public int ENEMY_SPAWN_TIMER = 150;
     private int flashTimer = 0;
 
     // Width and height of the canvas
     private double width, height;
 
     public GameLogic(double width, double height) {
+
         rand = new Random();
 
         gameTimer = new GameTimer();
@@ -125,6 +132,7 @@ public class GameLogic {
         gameOver = false;
         displayYouLose = false;
         playerScore = 0;
+        secondsAlive = 0;
 
     }
 
@@ -236,7 +244,10 @@ public class GameLogic {
             if (ENEMY_SPAWN_TIMER < 0) {
                 int chance = rand.nextInt(100);
                 if (chance < OBSTACLE_SPAWN_PROBABILITY) {
-
+                    /*IF it's less than default 10,
+                                    meaning 10 out of 100, 1 out of 10, 10% of the time
+                                    THEN move on to more stuff.
+                                    */
                     if (chance < ENEMY_SPAWN_PROBABILITY) {
                         ArrayList<Ball> either = new ArrayList<>();
                         LifeGiver lifeGiver = new LifeGiver();
